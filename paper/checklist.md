@@ -1,0 +1,15 @@
+- Regenerate + export:
+  - `python scripts/run_all_experiments.py --clean`
+  - `python scripts/export_paper_assets.py --no-run`
+- Strict audit:
+  - `python scripts/audit_results.py --strict`
+- Build paper:
+  - `python scripts/build_paper.py`
+- Visual inspection:
+  - Figures: packaging / holonomy / sweep-K / sweep-E / learning all present
+  - Ablations table present
+  - References section present
+  - Appendix (Lean anchor) present
+- Log hygiene:
+  - 0 undefined references
+  - 0 undefined citations

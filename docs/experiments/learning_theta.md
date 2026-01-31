@@ -1,0 +1,7 @@
+- script: scripts/measure_learning_theta.py
+- config_hash: a0f8e625732cf8d71b30da1f0da64ba53afef806e50d8a804aec95dea550ea06
+- median_theta0=0.7330983751920465
+- median_theta1=1.0045739033658136
+- median_theta2=1.3416542136663907
+- json: results/learning/learning_theta_a0f8e625732cf8d71b30da1f0da64ba53afef806e50d8a804aec95dea550ea06.json
+- png: results/learning/learning_theta_a0f8e625732cf8d71b30da1f0da64ba53afef806e50d8a804aec95dea550ea06.png

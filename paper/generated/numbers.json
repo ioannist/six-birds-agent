@@ -1,0 +1,48 @@
+{
+  "hash_packaging_off": "a6cb93244f7b9ea35a3becdee4fc19bd7ceea6c5288fa35a145ec2e5f111b035",
+  "hash_packaging_on": "df5dc0d3aeb20f7a90789a55f11bd1d96e6a1c10187ba028b939d631564f4892",
+  "defect_off_tau2": 1.0,
+  "defect_on_tau2": 0.0,
+  "protocol_hash_on": "6a3a640708dd552b56d217960cc950ce1134ddf896aa0a761aea589362cbbdd3",
+  "protocol_hash_off": "c65aaf545518534638f34842585ed24da87fd9c9172897857f5ca93984fff681",
+  "protocol_H_list": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "protocol_emp_on": [
+    1.0493047506642952,
+    1.6613316537277607,
+    1.6328210780084584,
+    1.689441900502319,
+    1.6626508269138525
+  ],
+  "protocol_emp_off": [
+    1.0493047506642952,
+    1.121790232449197,
+    1.1034182513102877,
+    1.0856007783396602,
+    1.0718894391323397
+  ],
+  "sweep_run_id": "1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45",
+  "sweep_metric_minmax": {
+    "K_size_min": 0.0,
+    "K_size_max": 56.0,
+    "emp_median_min": 0.0,
+    "emp_median_max": 2.321928094887362
+  },
+  "learning_hash_cfg": "a0f8e625732cf8d71b30da1f0da64ba53afef806e50d8a804aec95dea550ea06",
+  "learning_medians_theta0": 0.7330983751920465,
+  "learning_medians_theta1": 1.0045739033658136,
+  "learning_medians_theta2": 1.3416542136663907,
+  "holonomy_witness_tvd_on": 0.6720000000000003,
+  "holonomy_witness_tvd_off": 0.09600000000000003,
+  "holonomy_witness_state": {
+    "y": 0,
+    "r": 2,
+    "phi": 1,
+    "u": 0
+  }
+}

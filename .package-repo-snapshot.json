@@ -1,0 +1,38 @@
+{
+  "allowed_roots": {
+    "docs": {
+      "extensions": [".md", ".tex", ".pdf", ".png", ".jpg", ".jpeg"]
+    },
+    "scripts": {
+      "extensions": [".sh", ".py", ".txt"]
+    },
+    "sbt_agency": {
+      "extensions": [".py"]
+    },
+    "src": {
+      "extensions": [".py", ".txt", ".md", ".toml", ".ini", ".json", ".yml", ".yaml"]
+    },
+    "tests": {
+      "extensions": [".py", ".txt", ".md"]
+    }
+  },
+  "allowed_root_files": [
+    "README.md",
+    "pyproject.toml",
+    ".gitignore",
+    "sitecustomize.py",
+    "plan.md",
+    ".package-repo-snapshot.json"
+  ],
+  "exclude_dirs": [
+    ".git",
+    ".lake",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".ipynb_checkpoints"
+  ]
+}

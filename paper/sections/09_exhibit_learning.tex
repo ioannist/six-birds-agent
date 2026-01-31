@@ -1,0 +1,30 @@
+\section{Exhibit: operator rewriting thickens causal control (learning $\theta$)}
+\label{sec:ex_learning}
+
+This exhibit isolates P$_1$ (operator-write): \emph{learning as induced law change}. In \SBT, P$_1$ is not merely storing facts; it is rewriting the effective transition operator so the same boundary interventions become more reliable, cheaper, or higher-bandwidth. In the engine (Section~\ref{sec:engine}) this should show up as increased difference-making capacity: higher feasible empowerment under comparable constraints.
+
+\subsection{Setup: a discrete skill variable that rewrites dynamics}
+We use a ring-world configuration with a discrete skill variable $\theta\in\{0,1,2\}$ that reduces effective slip/noise in the dynamics. Intuitively: higher $\theta$ corresponds to a better internal model or controller that executes the same LEFT/RIGHT interface moves with fewer unintended outcomes. This is the operational surrogate of P$_1$: changing $\theta$ changes the induced kernel $P[a,s,s']$ (the law), not merely the agent's memory.
+
+To isolate the operator effect from budgets, we set action costs to zero in this configuration; feasibility is therefore trivial (all sequences are feasible), and empowerment reflects reliability/controllability rather than spending power. Since all action costs are zero in this configuration, feasibility is trivial and $\Emp_{\mathrm{feas}}=\Emp$ here. We measure empowerment at horizon $H=2$ using the outside position lens $f(s)=y$, and we summarize by the \emph{median} empowerment over viable states in each $\theta$-sector (restricting to a fixed staged phase and a coherent internal bit to avoid conflating $\theta$ with trivial staging effects).
+
+\subsection{Result: empowerment increases monotonically with skill}
+Figure~\ref{fig:learning_theta} shows the median empowerment as a function of $\theta$. The measured medians (bits) are:
+\begin{align*}
+\mathrm{median}\ \Emp_{\mathrm{feas}}(\theta=0) &= 0.7330983751920465,\\
+\mathrm{median}\ \Emp_{\mathrm{feas}}(\theta=1) &= 1.0045739033658136,\\
+\mathrm{median}\ \Emp_{\mathrm{feas}}(\theta=2) &= 1.3416542136663907.
+\end{align*}
+Thus, higher skill yields a strictly larger action channel to outside futures at the same horizon.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.78\linewidth]{figures/fig_learning_theta.png}
+  \caption{Operator rewriting (P$_1$) increases difference-making. Median feasible empowerment (bits) at horizon $H=2$ using output lens $f(s)=y$ (outside position), grouped by discrete skill $\theta$ that reduces effective slip/noise in the ring-world kernel. Empowerment increases monotonically with $\theta$, consistent with P$_1$ as an induced law change rather than merely an internal record.}
+  \label{fig:learning_theta}
+\end{figure}
+
+\subsection{Interpretation: learning as ``causal thickening''}
+This is the minimal learning-as-agency statement in \SBT terms. Packaging and viability (P$_5$/P$_6$) can make an induced layer persist, and protocol holonomy (P$_3$) can add horizon-dependent reachability, but P$_1$ changes something deeper: it changes the \emph{effective physics} of the induced layer. Increasing $\theta$ rewrites the transition structure so that interface interventions map to outside consequences with higher reliability; the induced theory becomes sharper, and the agent becomes more capable of throwing a stone in the counterfactual sense.
+
+In the thesis language, this is the point at which ``agent as theory object'' becomes quantitative: operator rewriting (higher $\theta$) does not merely store information, it changes the effective transition law so the same interface interventions map to outside consequences with higher reliability. The theory remains the same induced layer, but the agent object becomes a better compiler of causes at the boundary, producing a higher-capacity action channel to outside futures.

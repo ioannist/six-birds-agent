@@ -1,0 +1,8 @@
+- script: scripts/measure_packaging_ring.py
+- config_hash_off: a6cb93244f7b9ea35a3becdee4fc19bd7ceea6c5288fa35a145ec2e5f111b035
+- config_hash_on: df5dc0d3aeb20f7a90789a55f11bd1d96e6a1c10187ba028b939d631564f4892
+- defect_off(tau=2)=1.0
+- defect_on(tau=2)=0.0
+- json: results/packaging/packaging_ring_a6cb93244f7b9ea35a3becdee4fc19bd7ceea6c5288fa35a145ec2e5f111b035_df5dc0d3aeb20f7a90789a55f11bd1d96e6a1c10187ba028b939d631564f4892.json
+- png: results/packaging/packaging_ring_a6cb93244f7b9ea35a3becdee4fc19bd7ceea6c5288fa35a145ec2e5f111b035_df5dc0d3aeb20f7a90789a55f11bd1d96e6a1c10187ba028b939d631564f4892.png
+- note: odd tau cannot be idempotent because phi shifts when tau is odd (lens includes phi).
