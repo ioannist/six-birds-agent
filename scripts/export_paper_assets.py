@@ -129,10 +129,10 @@ def _export_ablations_table() -> Path:
     with out_path.open("w", encoding="utf-8") as f:
         f.write("\\begin{tabular}{lrrr}\n")
         f.write("\\toprule\n")
-        f.write("name & kernel\\_size\\_viable & empowerment\\_median\\_on\\_K & idempotence\\_defect \\\\\n")
+        f.write("name & kernel size viable & empowerment median on K & idempotence defect \\\\\n")
         f.write("\\midrule\n")
         for row in rows:
-            name = row["name"].replace("_", "\\_")
+            name = row["name"].replace("_", " ")
             f.write(
                 f"{name} & {_fmt(row['kernel_size_viable'])} & "
                 f"{_fmt(row['empowerment_median_on_K'])} & {_fmt(row['idempotence_defect'])} \\\\\n"

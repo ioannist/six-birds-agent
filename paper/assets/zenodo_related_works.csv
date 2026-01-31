@@ -1,0 +1,11 @@
+relation,identifier,scheme,resource_type,bibkey,title
+Cites,10.5281/zenodo.18365949,DOI,other,six_birds_theory,Six Birds: Foundations of Emergence Calculus
+Cites,10.5281/zenodo.18420406,DOI,other,six_birds_life,To Wake a Stone with Six Birds: A Life is A Theory
+Cites,10.1109/TIT.1972.1054855,DOI,publication-article,blahut1972,Computation of Channel Capacity and Rate-Distortion Functions
+Cites,10.1109/TIT.1972.1054753,DOI,publication-article,arimoto1972,An Algorithm for Computing the Capacity of Arbitrary Discrete Memoryless Channels
+Cites,10.1109/CEC.2005.1554676,DOI,publication-conferencepaper,klyubin2005,Empowerment: A Universal Agent-Centric Measure of Control
+Cites,978-0817635718,ISBN,publication-book,aubin1991,Viability Theory
+Cites,10.2140/pjm.1955.5.285,DOI,publication-article,tarski1955,A Lattice-Theoretical Fixpoint Theorem and Its Applications
+Cites,10.1007/978-3-030-79876-5_37,DOI,publication-conferencepaper,demoura2021lean4,The Lean 4 Theorem Prover and Programming Language
+Cites,10.48550/arXiv.1910.09336,DOI,publication-article,mathlib2019,The Lean Mathematical Library
+Cites,10.1002/j.1538-7305.1948.tb01338.x,DOI,publication-article,shannon1948,A Mathematical Theory of Communication
