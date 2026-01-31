@@ -58,7 +58,7 @@ Given a candidate set $K\subseteq S$, define the contracting controlled-invarian
 Intuitively: $s$ remains in $K$ if it is safe and there exists a feasible action whose entire successor support stays inside $K$. The explicit condition $s\in K$ makes $\mathcal{V}$ pointwise contracting ($\mathcal{V}(K)\subseteq K$), matching the standard ``greatest controlled-invariant subset'' construction and the assumptions of our Lean fixed-point anchor.
 
 \paragraph{Definition (Viability kernel).}
-The viability kernel $\K\subseteq S$ is the greatest fixed point of $\mathcal{V}$ \citep{aubin1991},
+The viability kernel $\K\subseteq S$ is the greatest fixed point of $\mathcal{V}$ \citep{aubin1991,tarski1955},
 \[
 \K \;=\; \mathcal{V}(\K),
 \]
@@ -82,11 +82,11 @@ Equivalently, each row of $W$ is the output distribution obtained by propagating
 
 \subsection{Feasible empowerment as difference-making}
 \paragraph{Definition (Empowerment).}
-For a fixed $(s_0,H,f)$, empowerment is the channel capacity of $W$ \citep{klyubin2005}:
+For a fixed $(s_0,H,f)$, empowerment is the channel capacity of $W$ \citep{klyubin2005,shannon1948}:
 \[
 \Emp(s_0;H,f) \;:=\; \max_{p(\alpha)} I(\Alpha;Y),
 \]
-where $\Alpha$ is the chosen action-sequence random variable and $I(\cdot;\cdot)$ is mutual information. We compute this exactly (for small channels) via Blahut--Arimoto \citep{blahut1972,arimoto1972}.
+where $\Alpha$ is the chosen action-sequence random variable and $I(\cdot;\cdot)$ is mutual information \citep{shannon1948}. We compute this exactly (for small channels) via Blahut--Arimoto \citep{blahut1972,arimoto1972}.
 
 \paragraph{Definition (Feasible empowerment).}
 To respect P$_2$/P$_6$, we restrict the sequence set by ledger feasibility. Given costs $c(a)$ and budget $r(s_0)$, a sequence $\alpha$ is feasible if $\sum_{t=0}^{H-1} c(a_t) \le r(s_0)$. Feasible empowerment is the capacity of the restricted channel:
