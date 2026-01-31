@@ -1,0 +1,42 @@
+\section{Exhibit: repair makes objecthood}
+\label{sec:ex_packaging}
+
+This exhibit isolates a minimal claim: \emph{packaging stability depends on maintenance}. In the engine (Section~\ref{sec:engine}) we defined an empirical packaging endomap $E$ for a macro lens $\pi$ that hides microstate, and an idempotence defect $\mathrm{Def}(E)$ that quantifies whether macro labels behave like stable objects under that lens. Here we show that allowing a repair/maintenance action (P$_6$) collapses defect from maximal to zero at a coherence-aligned horizon.
+
+\subsection{Setup: a lens that hides microstate}
+We use the ring-world substrate whose full microstate includes an outside coordinate $y$ on a ring, an internal damage bit $u$, a staged phase variable $\phi$, a ledger $r$, and (optionally) identity/skill sectors. The crucial choice is the macro lens:
+\[
+\pi(y,u,\phi,r,\dots)\;:=\;(y,r,\phi),
+\]
+i.e., the lens \emph{intentionally ignores} the damage bit $u$. This is exactly the situation in which ``objecthood'' is nontrivial: if $u$ churns underneath but the induced macro labels remain stable, then the lens has packaged the micro-churn into an object-like macro description; if the labels fail to compose, then the lens does not induce an object.
+
+Because the lens includes the staged phase $\phi$ with period $m_{\phi}=2$, idempotence is only meaningful at horizons $\tau$ that respect staging. We therefore emphasize $\tau=2$ (a full phase cycle), which factors out the trivial non-idempotence that would occur at odd $\tau$ purely from the $\phi$ shift. Figure~\ref{fig:packaging_ring} reports $\mathrm{Def}(E)$ across $\tau$; we highlight $\tau=2$ because it is the \emph{first} staging-aligned horizon (a full phase cycle), i.e., the earliest point at which idempotence can hold without being blocked by the $\phi$ shift.
+
+\subsection{Two regimes: repair disabled versus repair enabled}
+We compare two regimes that are identical except for whether REPAIR is present and used.
+\begin{itemize}[leftmargin=*, itemsep=0.25em]
+  \item \textbf{Repair OFF:} the policy always moves RIGHT; the damage bit $u$ can flip due to noise, but the agent cannot pay to reset it.
+  \item \textbf{Repair ON:} the policy uses REPAIR whenever $u=1$ (when feasible) and otherwise moves RIGHT; repair succeeds with probability $1$ when executed.
+\end{itemize}
+For each macro label $x=(y,r,\phi)$, we initialize the reference distribution uniformly over its fiber $S_x=\{s:\pi(s)=x\}$ and roll forward $\tau$ steps under the policy to define the endomap $E(x)$ as the mode macro label (Section~\ref{sec:engine}). The idempotence defect $\mathrm{Def}(E)$ then reports what fraction of macro labels fail the compositional stability test $E(E(x))=E(x)$.
+
+\subsection{Result: defect collapses at $\tau=2$}
+Figure~\ref{fig:packaging_ring} plots $\mathrm{Def}(E)$ versus horizon $\tau$ for the two regimes. At $\tau=2$ we obtain:
+\[
+\mathrm{Def}(E)_{\text{repair OFF}} = 1.0,
+\qquad
+\mathrm{Def}(E)_{\text{repair ON}} = 0.0.
+\]
+That is: without maintenance, the macro labels $(y,r,\phi)$ behave maximally non-object-like under composition; with maintenance, the same coarse lens becomes perfectly idempotent at the staging-aligned horizon.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.88\linewidth]{figures/fig_packaging_ring.png}
+  \caption{Packaging stability requires maintenance. Idempotence defect $\mathrm{Def}(E)$ of the empirical endomap $E$ under the macro lens $\pi(y,u,\phi,r,\dots)=(y,r,\phi)$ that hides the damage bit $u$. Repair disabled (policy cannot reset $u$) yields maximal defect at $\tau=2$; repair enabled and used collapses defect to zero at $\tau=2$.}
+  \label{fig:packaging_ring}
+\end{figure}
+
+\subsection{Interpretation in Six Birds terms}
+This is the minimal ``objecthood requires payment'' statement. The lens $\pi$ is not enough by itself: if microstate can drift underneath with no compensating closure, then macro labels fail to behave like objects. Allowing repair introduces a P$_6$ transduction (spending budget to restore coherence) that, together with P$_5$ closure, stabilizes the induced macro description. In the language of the thesis, repair makes the induced \emph{theory layer} support stable \emph{theory objects}: at the staging-aligned horizon, the coarse macro labels behave like objects under composition, providing a well-typed substrate on which an agent object with an interface can be defined.
+
+In later exhibits we show that this stabilized package also supports nontrivial difference-making (feasible empowerment) and survives explicit guardrails that would otherwise produce false positives.

@@ -1,0 +1,10 @@
+- script: scripts/sweep_noise_maintenance.py
+- run_id: 1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45
+- p_flip_values: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+- repair_cost_values: [0, 1, 2, 3, 4, 5, 6, 7]
+- safe: safe(s) := (r>=1 and u==0)
+- K_size_min=0.0, K_size_max=56.0
+- emp_median_min=0.0, emp_median_max=2.321928094887362
+- npz: results/sweeps/noise_maintenance_1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45.npz
+- K_png: results/sweeps/noise_maintenance_K_1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45.png
+- E_png: results/sweeps/noise_maintenance_E_1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45.png

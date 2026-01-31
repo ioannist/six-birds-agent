@@ -1,0 +1,58 @@
+\section{Introduction}
+\label{sec:introduction}
+
+\subsection{To throw a stone}
+To \emph{throw a stone} is to make a reliable difference in the outside world: after the throw, the world is measurably different than it would have been otherwise. That sounds trivial until one asks what must already be true for the sentence to be meaningful. Where is the ``throw'' located in a messy substrate of micro-interactions? Which degrees of freedom count as the thrower, which as the stone, and which as the outside world? When does a subsystem have \emph{choices} rather than merely being pushed around?
+
+This paper treats agency as an \emph{emergent, induced} notion. The stone-throwing motif is a reminder that agency is not primarily about internal stories (goals, intentions, preferences), but about \emph{counterfactual difference-making under constraints}: there exist at least two feasible interface policies that lead to measurably different outside futures at the relevant horizon.
+
+\subsection{From objects to agents in \SBT}
+In \SBT\ (\citep{six_birds_theory}), macroscopic objects are not assumed as primitives. Instead, \SBT\ proposes six emergence primitives (``six birds'') that enable stable macroscopic descriptions: writing/closure, constraints, protocol holonomy, quantization/identity staging, viability closure, and resource transduction. On this view, an ``object'' is a stabilized package: a closure that persists long enough that it can be treated as a thing with boundary conditions.
+
+A natural next step is agency. If objects are induced, then agents should be induced too. The Life paper (\citep{six_birds_life}) already pushes in this direction: life is treated as a maintenance-and-closure phenomenon rather than a list of biological exceptions. Here we ask the parallel question for agency: \emph{what must be enabled so that something like an action exists, and once enabled, what does it mean for that action to be causal?}
+
+\subsection{Agenthood versus agency}
+We separate two notions that are often conflated.
+
+\paragraph{Agenthood (enablement across layers).}
+Before there is an agent, there are only micro-interactions. An agent is a \emph{packaged closure} that becomes stable enough to support an internal/external distinction, a ledger, and a controllable interface. This is an enablement claim: it is about the existence and persistence of a layer in which ``actions'' are well-defined variables. In \SBT\ terms, agenthood is primarily built from packaging/viability (P$_5$), accounting (P$_6$), and feasibility constraints (P$_2$), typically with staging/identity (P$_4$) to set a meaningful horizon.
+
+\paragraph{Agency (causation inside a layer).}
+Once an agent layer exists, we can ask causal questions: do different feasible interface choices lead to different outside futures? This is a within-layer notion: interventions on an action variable should change the distribution of future outside macrostates. In our finite setting, we operationalize this ``difference-making'' using channel capacity (empowerment) restricted to feasible action sequences.
+
+This separation matters because many apparent agency signals are artifacts of modeling. A single-action system can look active but has no control capacity; an exogenous schedule can be mistaken for choice if incorrectly treated as an action. We include explicit null regimes to guard against such false positives.
+
+\subsection{Thesis: an agent is a \emph{theory object}}
+Our thesis is: an agent is a \emph{theory object}. In \SBT, a \emph{theory} is a \emph{layer/closure}: an induced macro-physics (often written $T=(\Pi,L,\mathcal F,B)$) that makes certain macro-variables stable and well-typed for causal talk. A \emph{theory object} is not the layer itself, but an object \emph{in} that layer: a package that persists under the layer's closure and accounting rules, and whose boundary degrees of freedom can be intervened upon.
+
+Concretely, in this paper the finite controlled kernel together with its lenses, feasibility gate, and ledger instantiates such a theory at a chosen scale. The \emph{agent} is the stabilized object this theory induces: a viable packaged subsystem (captured by a nonempty viability kernel and low packaging defect) equipped with an interface alphabet that supports a nontrivial feasible action channel to outside futures.
+
+In \SBT\ terms, agenthood is the enablement of a causally thick layer; the agent is the corresponding theory object (a maintained invariant package) inside that layer. Agency is then the within-layer causal content: interventions on the interface change the distribution of outside macrostates at the relevant horizon.
+
+\subsection{Operational plan and evidence}
+We make the thesis testable by committing to a small, exact finite-state substrate and three complementary metrics.
+
+\begin{enumerate}[leftmargin=*, itemsep=0.25em]
+  \item \textbf{Viability as a greatest fixed point.} We compute a robust viability kernel $\K$ (greatest controlled-invariant safe set) under support semantics: a state remains viable if there exists a feasible action whose successor support stays inside $\K$.
+  \item \textbf{Difference-making as feasible empowerment.} For a horizon $H$, we build the induced channel from action sequences to an outside output variable and compute its capacity, restricted by ledger-gated feasibility (budgets and costs).
+  \item \textbf{Packaging stability as an empirical endomap.} For a macro lens that hides micro-degrees of freedom, we empirically define an endomap $E$ on macro labels by rolling forward and taking the mode. Its \emph{idempotence defect} quantifies whether the macro labels behave like stable objects under that lens.
+\end{enumerate}
+
+We instantiate these in a minimal ring-world environment with toggles corresponding to the \SBT\ primitives: protocol holonomy (P$_3$), repair/maintenance accounting (P$_6$), feasibility gating (P$_2$), optional identity sector (P$_4$), and optional operator rewriting (learning, P$_1$). The exhibits then show: repair collapses packaging defect; protocol produces horizon-dependent empowerment gains; learning increases empowerment with skill; and null regimes demonstrate how agency can be faked by mis-modeling.
+
+\subsection{Guide to the paper}
+Section~\ref{sec:dictionary} gives a compact dictionary from \SBT\ primitives to agency roles and to the metrics we use. Section~\ref{sec:engine} defines the finite computational substrate and the operational notions (viability, feasible empowerment, packaging endomap). Sections~\ref{sec:ex_packaging}--\ref{sec:ex_learning} present the quantitative exhibits (packaging, nulls, holonomy, ablations, sweep, learning). Section~\ref{sec:repro} documents reproducibility: hashed configs, audited artifacts, and a small Lean lemma anchoring viability as a greatest fixed point. We close in Section~\ref{sec:discussion} with implications, limitations, and how ``an agent is a \emph{theory object}'' scales beyond this toy substrate.
+
+\paragraph{Code availability.}
+\begin{itemize}[noitemsep,topsep=2pt]
+\item Repository: \url{https://github.com/ioannist/six-birds-agent}
+\end{itemize}
+
+\subsection*{Contributions}
+\begin{itemize}[leftmargin=*, itemsep=0.25em]
+  \item \textbf{Agenthood in Six Birds terms.} We define an agent as a maintained package---a \emph{theory object}---whose interface variables make stable counterfactual differences at an induced scale (``an agent is a \emph{theory object}'').
+  \item \textbf{Operational metrics for the six primitives.} We connect packaging (endomap + idempotence defect), viability (greatest fixed-point kernel), and difference-making (feasible empowerment) to the SBT primitives.
+  \item \textbf{A minimal substrate with primitive toggles.} We provide a finite ring-world environment whose switches realize protocol holonomy, accounting/constraints, identity staging, and operator rewriting.
+  \item \textbf{Evidence suite with guardrails.} We demonstrate (repair $\Rightarrow$ objecthood), (protocol $\Rightarrow$ horizon control capacity), (learning $\Rightarrow$ increased empowerment), and two null regimes that prevent false positives.
+  \item \textbf{Reproducibility and formal anchor.} We ship hashed configs, an artifact auditor, and a Lean lemma establishing the finite greatest-fixed-point property underlying viability iteration.
+\end{itemize}

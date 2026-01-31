@@ -1,0 +1,11 @@
+- script: scripts/run_ablations.py
+- summary: results/ablations/summary.csv
+- runs: results/ablations/run_<name>_<config_hash>.json
+
+- full: 6a3a640708dd552b56d217960cc950ce1134ddf896aa0a761aea589362cbbdd3 | K=64 | emp=1.6613316537277607 | defect=0.3333333333333333
+- no_protocol: c65aaf545518534638f34842585ed24da87fd9c9172897857f5ca93984fff681 | K=64 | emp=1.121790232449197 | defect=0.3333333333333333
+- no_repair: d08950d1fa3ed9aaea8a3b81c89b474793a9763e52b5f73ce3cd729d39564414 | K=0 | emp=0.0 | defect=0.0
+- constraints_off: 6dd35428192b34e65d676d310211abbb4f3851af1c1aac06026e04cee696f47e | K=64 | emp=0.7941525895842101 | defect=1.0
+- learn_on: a3a79deb23e7b3e4a4e6cdab47af41a048fa7635b4a33b202da6434660613879 | K=128 | emp=1.830911549353577 | defect=0.3333333333333333
+- high_noise: accd757af2ba4d36ed8f261321e534bc278603d75a23a8ad6e7dc3056863db89 | K=64 | emp=1.152638090814535 | defect=0.3333333333333333
+- repair_imperfect: e8ec106b76f6ca1bfffa513fcf068d045fb9c90198d6929259d44b1e41f62b74 | K=64 | emp=1.5573163482093337 | defect=0.0
