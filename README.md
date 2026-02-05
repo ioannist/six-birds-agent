@@ -1,7 +1,5 @@
 # To Throw a Stone with Six Birds
 
-This repository contains the **agency instantiation** for the paper:
-
 > **To Throw a Stone with Six Birds: An Agent is a Theory Object**
 >
 > Archived at: https://zenodo.org/records/18439737
