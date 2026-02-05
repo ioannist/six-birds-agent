@@ -34,3 +34,4 @@ paper/build/*.fdb_latexmk
 paper/build/*.synctex.gz
 paper/build/**
 !paper/build/.gitkeep
+paper/arxiv_upload.tar.gz

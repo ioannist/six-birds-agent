@@ -47,6 +47,26 @@ def main() -> int:
     if not pdf_path.exists():
         raise SystemExit(f"Build failed: {pdf_path} not found")
 
+    flattener = shutil.which("latexpand") or shutil.which("texflatten")
+    if not flattener:
+        raise SystemExit(
+            "Missing LaTeX flattener: install 'latexpand' (recommended) or 'texflatten'."
+        )
+
+    flat_path = out_dir / "agency_flattened.tex"
+    if Path(flattener).name == "latexpand":
+        cmd = [flattener, "-o", str(flat_path), str(tex_path.name)]
+        subprocess.run(cmd, check=True, cwd=paper_dir)
+    else:
+        result = subprocess.run(
+            [flattener, str(tex_path.name)],
+            check=True,
+            cwd=paper_dir,
+            text=True,
+            stdout=subprocess.PIPE,
+        )
+        flat_path.write_text(result.stdout, encoding="utf-8")
+
     print(f"Build succeeded: {pdf_path}")
     return 0
 
