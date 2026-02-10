@@ -4,6 +4,8 @@
 \subsection{To throw a stone}
 To \emph{throw a stone} is to make a reliable difference in the outside world: after the throw, the world is measurably different than it would have been otherwise. That sounds trivial until one asks what must already be true for the sentence to be meaningful. Where is the ``throw'' located in a messy substrate of micro-interactions? Which degrees of freedom count as the thrower, which as the stone, and which as the outside world? When does a subsystem have \emph{choices} rather than merely being pushed around?
 
+This is a Research Article: it reports original computational experiments with reproducible configurations, hash-traceable artifacts, and a mechanized Lean anchor, not a review, opinion, or purely theoretical contribution.
+
 This paper treats agency as an \emph{emergent, induced} notion. The stone-throwing motif is a reminder that agency is not primarily about internal stories (goals, intentions, preferences), but about \emph{counterfactual difference-making under constraints}: there exist at least two feasible interface policies that lead to measurably different outside futures at the relevant horizon.
 
 \subsection{From objects to agents in \SBT}
@@ -47,6 +49,15 @@ Section~\ref{sec:dictionary} gives a compact dictionary from \SBT\ primitives to
 \begin{itemize}[noitemsep,topsep=2pt]
 \item Repository: \url{https://github.com/ioannist/six-birds-agent}
 \end{itemize}
+
+\subsection*{Computational contributions}
+The concrete deliverables of this paper are algorithmic and software-engineering contributions:
+(i)~a modular pipeline for computing viability kernels (greatest controlled-invariant safe sets) via monotone fixed-point iteration on finite controlled Markov kernels with ledger-gated feasibility;
+(ii)~a feasible empowerment estimator (channel capacity via Blahut--Arimoto, restricted by budget constraints) that quantifies counterfactual difference-making;
+(iii)~an empirical packaging endomap and idempotence-defect diagnostic for auditing whether coarse-grained macro labels behave like stable objects;
+(iv)~reproducible experiment configurations with deterministic scripts, hash-traceable artifacts, and a strict audit mode;
+and (v)~a minimal Lean~4 mechanized anchor for the viability-kernel fixed-point property.
+This work sits at the intersection of control theory (viability, robust invariance), information theory (empowerment as channel capacity), and formal methods (fixed points, audited operators, Lean proof).
 
 \subsection*{Contributions}
 \begin{itemize}[leftmargin=*, itemsep=0.25em]
