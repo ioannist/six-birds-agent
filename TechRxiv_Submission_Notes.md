@@ -46,6 +46,7 @@ We present a reproducible computational framework for defining and measuring age
 ## Links
 
 - **Zenodo DOI (paper):** https://doi.org/10.5281/zenodo.18439737
+- **Zenodo DOI (code):** https://doi.org/10.5281/zenodo.18451887
 - **GitHub repository:** https://github.com/ioannist/six-birds-agent
 - **SBT Foundations reference:** https://doi.org/10.5281/zenodo.18365949
 
