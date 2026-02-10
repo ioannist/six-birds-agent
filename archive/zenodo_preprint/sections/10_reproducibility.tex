@@ -1,0 +1,31 @@
+\section{Reproducibility and artifact contract}
+\label{sec:repro}
+
+This paper is designed to be reproducible as a \emph{contract}, not as an aspiration. Every quantitative claim in the exhibits is backed by an audited artifact produced by deterministic scripts, keyed by stable configuration hashes. This section specifies (i) the contract that artifacts must satisfy, (ii) the exact commands that regenerate and verify them, and (iii) the small formal anchor that connects our viability computation to a greatest-fixed-point theorem.
+
+\subsection{Artifact contract (what every result must contain)}
+All experiment outputs live under \texttt{results/} and are machine-checkable. JSON artifacts are required to include (possibly with type-specific naming for multi-config comparisons):
+\begin{itemize}[leftmargin=*, itemsep=0.25em]
+  \item \textbf{Configuration identity:} a \texttt{config} dictionary and its \texttt{config\_hash}, where the hash is a stable JSON hash of the config.
+  \item \textbf{Metrics payload:} a \texttt{metrics} dictionary (or a type-specific payload for traces/sweeps) containing the quantitative outputs used in the paper.
+  \item \textbf{Provenance:} a timestamp field (e.g., \texttt{created\_at\_utc}) and a \texttt{versions} dictionary (Python, NumPy, Matplotlib as applicable).
+\end{itemize}
+Filenames also encode hashes when appropriate, so that a plot or table can be traced to a configuration without opening the file.
+
+For paper-facing stability, we export stable-named assets (figures and generated tables) into \texttt{paper/figures/} and \texttt{paper/generated/}. The file \texttt{paper/generated/numbers.json} collects the key scalars cited in the exhibits (e.g., idempotence defect at $\tau=2$, empowerment arrays, and learning medians) together with the hashes of the runs they were extracted from.
+
+\subsection{How to regenerate and verify (exact commands)}
+To regenerate all artifacts used by the paper from scratch, and then verify them, run the following two commands from the repository root:
+
+\begin{verbatim}
+python scripts/run_all_experiments.py --clean
+python scripts/audit_results.py --strict
+\end{verbatim}
+
+The first command rebuilds the full suite of evidence artifacts (rollouts, packaging measurements, null regimes, holonomy horizons, ablation table, sweep heatmaps, and learning--$\theta$ medians). The second command enforces the artifact contract above and fails if any artifact is missing required fields, if any \texttt{config\_hash} disagrees with the stable hash of the stored config, or if any stored probability objects violate basic stochasticity invariants.
+
+\subsection{Determinism and traceability}
+Experiments that involve sampling (e.g., sampling states from a viability kernel to estimate a median empowerment) use an explicit global seed and deterministic sampling rules. Configuration hashing uses a stable JSON serialization to ensure that the same config yields the same hash across runs and machines (modulo Python/library versions, which are recorded in each artifact).
+
+\subsection{Formal anchor: viability iteration as a greatest fixed point}
+Our viability kernel $\K$ is computed by iterating a monotone operator from the top safe set until convergence (Section~\ref{sec:engine}). In finite state spaces, this process stabilizes and yields the \emph{greatest} fixed point among all fixed points of the operator. In our finite kernel setting the controlled-invariance operator is explicitly contracting ($\mathcal{V}(K)\subseteq K$), matching the $\forall s,\ F(s)\subseteq s$ hypothesis in the Lean theorem. We provide a lightweight formal anchor of this fact in Lean 4 \citep{demoura2021lean4,mathlib2019}: see Appendix~\ref{app:lean_viability} and the corresponding file \texttt{lean/Agency/Viability.lean} in the repository.

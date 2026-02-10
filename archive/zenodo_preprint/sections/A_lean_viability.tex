@@ -1,0 +1,16 @@
+\section{Lean anchor: viability iteration computes the greatest fixed point}
+\label{app:lean_viability}
+
+The viability kernel in Section~\ref{sec:engine} is computed as the limit of iterating a monotone, contracting operator on a finite lattice of sets. In a finite setting, iterating from the top element stabilizes at a fixed point, and this fixed point is greatest among all fixed points (a finite Tarski-style result) \citep{tarski1955}.
+
+We formalize this statement in Lean 4 (mathlib) for operators on \texttt{Finset} with decidable equality and finiteness assumptions \citep{demoura2021lean4,mathlib2019}. The main exported theorem in \texttt{lean/Agency/Viability.lean} is:
+
+\begin{verbatim}
+theorem iterate_top_greatest_fixpoint
+  (F : Finset α → Finset α) (hmono : Monotone F) (hsub : ∀ s, F s ⊆ s) :
+  ∃ n : Nat,
+    let K := Nat.iterate F n Finset.univ
+    F K = K ∧ ∀ S : Finset α, F S = S → S ⊆ K
+\end{verbatim}
+
+In words: for any monotone operator $F$ that is pointwise contracting ($F(s)\subseteq s$), some iterate of $F$ applied to the top element (\texttt{univ}) yields a fixed point $K$, and every other fixed point $S$ is a subset of $K$.
