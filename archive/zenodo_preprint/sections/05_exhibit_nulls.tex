@@ -1,0 +1,46 @@
+\section{Exhibit: null regimes and trap checks}
+\label{sec:ex_nulls}
+
+The engine in Section~\ref{sec:engine} defines agency as \emph{difference-making}: there exist at least two feasible interface policies whose induced channel to outside futures has nonzero capacity. This is a powerful operational notion---and precisely because it is powerful, it is vulnerable to two classes of false positives:
+(i) confusing motion with control, and
+(ii) confusing exogenous structure with choice.
+
+This exhibit provides two guardrails (null regimes) that every later empowerment claim must survive.
+
+\subsection{Null A: single-action regimes have zero empowerment}
+If there is only one action available everywhere, then there is no choice variable and hence no action channel. In the notation of Section~\ref{sec:engine}, the action-sequence channel $W[\alpha,y]$ has exactly one input row (one possible $\alpha$), so its capacity is identically zero for any horizon $H$.
+
+We confirm this in an exact finite kernel with a nontrivial state evolution but a single action: the dynamics can move, but the agent cannot steer. The feasible empowerment values (bits) are:
+\[
+\Emp_{\mathrm{feas}}(H=1)=0,\quad
+\Emp_{\mathrm{feas}}(H=2)=0,\quad
+\Emp_{\mathrm{feas}}(H=3)=0.
+\]
+This baseline prevents an error of interpretation: \emph{being a dynamical subsystem is not the same as having agency}. Agency requires an input degree of freedom that can be intervened upon.
+
+\subsection{Null B: the schedule trap (exogenous structure mis-modeled as choice)}
+A more subtle failure mode is the \emph{schedule trap}. Many environments contain an exogenous variable---a clock, schedule, or external forcing---that influences the next outside state. If we mistakenly treat this exogenous variable as if it were the agent's action, we manufacture a fictitious control channel and obtain spurious empowerment.
+
+We demonstrate this with a toy system where an exogenous schedule bit $s_{\mathrm{ext}}$ determines the next outside state $x$. In the \emph{correct} model, $s_{\mathrm{ext}}$ is part of the state/noise and the agent's actions are ineffective; the induced channel rows are identical and capacity is zero. In the \emph{incorrect} model, we collapse state and treat the schedule as a controllable ``action'' that directly sets $x$; this produces an apparent 1-bit channel even though no such control exists.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}l l@{}}
+\toprule
+\textbf{Null regime} & \textbf{Empowerment / capacity (bits)} \\
+\midrule
+Null A (single action), $H=1$ & $0.0$ \\
+Null A (single action), $H=2$ & $0.0$ \\
+Null A (single action), $H=3$ & $0.0$ \\
+\addlinespace
+Null B (schedule trap), \emph{wrong} model & $1.0$ \\
+Null B (schedule trap), \emph{right} model & $0.0$ \\
+\bottomrule
+\end{tabular}
+\caption{Guardrails against false agency. Null A shows that dynamics without choice yields zero empowerment at all horizons. Null B shows that exogenous schedules can fake empowerment if incorrectly modeled as controllable actions; treating the schedule as state/noise restores the correct capacity of zero.}
+\label{tab:nulls}
+\end{table}
+
+\subsection{Why these nulls matter for the thesis}
+The thesis ``an agent is a \emph{theory object}'' includes a modeling discipline: the underlying theory/layer must type variables correctly on the proper side of the interface. Null A prevents us from calling any persistent moving pattern an agent. Null B prevents us from smuggling outside structure into the agent by mislabeling it as action. The remaining exhibits therefore interpret empowerment only after (i) feasibility is enforced by the ledger (P$_2$/P$_6$), and (ii) the action variable is genuinely controllable at the induced scale.

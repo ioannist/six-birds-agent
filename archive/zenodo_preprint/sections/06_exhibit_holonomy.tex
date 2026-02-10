@@ -1,0 +1,47 @@
+\section{Exhibit: protocol holonomy creates horizon-dependent control}
+\label{sec:ex_holonomy}
+
+This exhibit isolates P$_3$ (protocol cycle / holonomy): \emph{order matters}. In the engine (Section~\ref{sec:engine}) we defined (feasible) empowerment as the capacity of the induced channel from action sequences to outside futures. P$_3$ predicts a distinctive signature: if the environment admits noncommuting interface moves, then one-step control can look identical across regimes, while multi-step horizons reveal additional controllability created purely by \emph{sequence structure}.
+
+\subsection{Setup: identical kernels except for protocol}
+We compare two ring-world regimes that are identical in noise, budgets, and costs; the only difference is whether protocol holonomy is enabled.
+\begin{itemize}[leftmargin=*, itemsep=0.25em]
+  \item \textbf{Protocol ON (P$_3$ enabled):} the displacement induced by LEFT/RIGHT depends on a staged phase variable $\phi$, so that action composition over time is noncommutative (the effective move depends on when it is applied).
+  \item \textbf{Protocol OFF:} LEFT/RIGHT are phase-independent; sequence order produces no additional geometric drift beyond the obvious one-step effects.
+\end{itemize}
+In both regimes we measure \emph{median feasible empowerment on the viability kernel} $\K$ using output lens $f(s)=y$ (outside ring position) and horizons $H\in\{1,2,3,4,5\}$. Feasibility is enforced by the ledger: an action sequence is admissible only if its total cost fits within the initial budget (Section~\ref{sec:engine}).
+
+\subsection{Result: equality at $H=1$, divergence for $H\ge 2$}
+Figure~\ref{fig:protocol_horizon} shows the median feasible empowerment (bits) as a function of horizon $H$.
+
+\emph{At $H=1$, the curves coincide.} This is expected: a single step cannot exploit protocol holonomy because there is no order-of-composition effect in a one-element sequence. Formally, the channel inputs are single actions, so any holonomy that arises from noncommuting compositions is invisible.
+
+\emph{For $H\ge 2$, the curves separate.} Once sequences have length at least two, noncommutativity can create distinct reachable output distributions that do not exist in the protocol-OFF regime. This is the operational content of P$_3$: agency can arise from the geometry of action composition even when the one-step menu of actions looks the same.
+
+For reference, the measured empowerment values (median over viable states) are:
+
+\[
+\Emp_{\mathrm{feas}}^{\text{protocol ON}}(H=1..5)
+=
+[1.0493,\ 1.6613,\ 1.6328,\ 1.6894,\ 1.6627],
+\]
+\[
+\Emp_{\mathrm{feas}}^{\text{protocol OFF}}(H=1..5)
+=
+[1.0493,\ 1.1218,\ 1.1034,\ 1.0856,\ 1.0719].
+\]
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.88\linewidth]{figures/fig_protocol_horizon.png}
+  \caption{Protocol holonomy yields horizon-dependent control. Median feasible empowerment (bits) on the viability kernel $\K$ as a function of horizon $H$ for protocol ON vs OFF, using output lens $f(s)=y$ (outside position). The curves coincide at $H=1$ but diverge for $H\ge 2$, as predicted by P$_3$ noncommutativity: ordered action composition creates additional reachable outside futures that are not present in the phase-independent regime.}
+  \label{fig:protocol_horizon}
+\end{figure}
+
+\subsection{A checkable noncommutativity witness}
+Beyond the aggregate curve, we exhibit a single start state $s^\star$ and two length-2 sequences $\alpha=(\mathrm{R},\mathrm{L})$ and $\beta=(\mathrm{L},\mathrm{R})$. In the protocol-ON kernel their induced output distributions over $y$ differ, while in the protocol-OFF kernel they coincide (up to numerical tolerance). We report this as a total variation distance:
+\input{generated/holonomy_witness.tex}
+This is the concrete sense in which order-of-composition creates additional distinguishable futures at $H\ge 2$ even when $H=1$ remains matched.
+
+\subsection{Interpretation in Six Birds terms}
+This is the simplest ``protocol makes an agent more than a thermostat'' result. P$_3$ is not memory (P$_5$) and not budget (P$_6$): it is purely geometric. It says that a controller can gain effective degrees of freedom from the \emph{order} of its interface moves, and that such gains only appear when the induced layer admits multi-step horizons. In the thesis language, protocol holonomy enriches the agent object's action channel within an otherwise fixed theory: it increases the expressivity of feasible interventions without changing the packaging lens, thickening what the interface can reliably cause.

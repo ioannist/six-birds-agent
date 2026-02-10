@@ -1,0 +1,36 @@
+\section{Exhibit: primitive ablations (a quantitative toggle table)}
+\label{sec:ex_ablations}
+
+The previous exhibits isolated single mechanisms (maintenance for packaging; protocol for horizon-dependent control) and validated null baselines. This exhibit summarizes the same story as a compact toggle suite: we weaken or disable specific mechanisms corresponding to the \SBT\ primitives and measure the three operational proxies defined in Section~\ref{sec:engine}:
+(i) viability kernel size $|\K|$,
+(ii) median feasible empowerment on $\K$ (bits), and
+(iii) packaging idempotence defect for a coarse macro lens.
+
+\subsection{Ablation suite and metrics}
+Each row of Table~\ref{tab:ablations} corresponds to a configuration of the ring-world environment with a small number of toggles (protocol on/off, repair on/off, constraint costs on/off, learning on/off, noise strength, repair success). The table is generated from audited artifacts (Section~\ref{sec:repro}) and is included here verbatim to keep the paper aligned with reproducible outputs.
+
+\begin{table}[t]
+\centering
+\small
+\input{generated/ablations_summary.tex}
+\caption{Primitive ablations summary (generated). Columns: viability kernel size $|\K|$, median feasible empowerment on $\K$ (bits) at horizon $H=2$ using output lens $f(s)=y$, and packaging idempotence defect (Section~\ref{sec:engine}). Higher $|\K|$ indicates a larger robust controlled-invariant safe set under ledger-gated feasibility; higher empowerment indicates greater counterfactual difference-making; lower defect indicates more object-like macro labels under a coarse lens. Unless otherwise stated in an exhibit, viability here uses a ledger-only safety predicate $\mathrm{Safe}(s):=(r(s)\ge 1)$ (the sweep exhibit additionally requires $u=0$ to treat coherence as safety). All rows use the same observational contract for comparability: output lens $f(s)=y$, packaging lens $\pi=(y,r,\phi)$, empowerment horizon $H=2$, and packaging horizon $\tau=2$ (unless an exhibit explicitly states a different safety predicate or lens).}
+\label{tab:ablations}
+\end{table}
+
+\subsection{Reading the table in Six Birds terms}
+The table makes three structural points explicit.
+
+First, \textbf{agenthood is not guaranteed by dynamics alone}. When maintenance/repair is removed under costs (the \texttt{no repair} row), the viability kernel collapses ($|\K|=0$). In the engine semantics, this means there exists no state from which any feasible policy can keep all successor support inside a safe set. If the package cannot be maintained, there is no stable agent layer in which ``actions'' persist.
+
+Second, \textbf{difference-making depends on protocol structure, not only on action availability}. Comparing \texttt{full} to \texttt{no protocol}, we see the same $|\K|$ and the same packaging defect, but a substantial drop in feasible empowerment when protocol holonomy is disabled. This matches the P$_3$ claim from Exhibit~\ref{sec:ex_holonomy}: noncommutativity enriches the reachable outside futures only at multi-step horizons.
+
+Third, \textbf{constraints and accounting shape what counts as an action channel}. The \texttt{constraints off} row illustrates that removing costs changes which sequences are feasible and therefore changes both empowerment and the viability story---but it does not automatically produce objecthood. Packaging stability is a separate axis (captured by idempotence defect) that depends on closure and maintenance, not on ``freedom to act'' alone.
+
+The remaining rows (e.g., increased noise, imperfect repair, and learning/skill) should be read as quantitative perturbations: weakening the maintenance channel or increasing noise shrinks viable structure and reduces difference-making, while operator rewriting can recover some control capacity by reducing effective noise (expanded in Exhibit~\ref{sec:ex_learning}).
+
+\subsection*{Takeaways}
+\begin{itemize}[leftmargin=*, itemsep=0.25em]
+  \item \textbf{Maintenance gates existence.} Without budgeted maintenance, the robust viability kernel can collapse to $\emptyset$, leaving no stable agent layer.
+  \item \textbf{Protocol creates control beyond one step.} With the same viability and packaging, enabling holonomy increases feasible empowerment by expanding horizon-dependent reachability.
+  \item \textbf{Action is feasibility, not fantasy.} Changing costs and admissibility reshapes empowerment and viability, but objecthood (packaging defect) remains a distinct requirement tied to closure and repair.
+\end{itemize}

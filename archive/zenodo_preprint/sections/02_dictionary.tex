@@ -1,0 +1,55 @@
+\section{Dictionary: from six birds to agency}
+\label{sec:dictionary}
+
+\SBT\ (\citep{six_birds_theory}) treats macroscopic structure as \emph{induced} by six emergence primitives (``six birds''). Our agency proposal follows the same discipline: we do not assume goals, utilities, or homunculi; we assume only a finite stochastic substrate and ask which induced variables become stable, budgeted, and difference-making. The point of this section is to make the mapping explicit: each primitive contributes a distinct \emph{agency role}, and our experiments instrument that role with a corresponding metric or artifact.
+
+\paragraph{Terminology: theory versus theory object.}
+In \SBT\ a \emph{theory} is a layer/closure: an induced macro-physics $T=(\Pi,L,\mathcal F,B)$. Objects are then \emph{objects of a theory}: stable fixed points (or images) of the closures induced by $T$ under appropriate lenses and horizons. Throughout this paper we reserve the word ``theory'' for the induced layer $T$ and use \emph{theory object} for the stabilized package inside $T$. An \emph{agent} is a theory object with (i) a ledger-gated feasible interface alphabet and (ii) nontrivial within-layer difference-making.
+
+\paragraph{Three operational faces of agenthood.}
+In this paper we repeatedly return to three measurable proxies, each corresponding to a different aspect of the ``agent is a theory object'' thesis.
+\begin{itemize}[leftmargin=*, itemsep=0.25em]
+  \item \textbf{Packaging / objecthood:} does a macro lens that hides micro-degrees of freedom behave like an object map? We measure this with an empirical endomap $E$ and its idempotence defect (Section~\ref{sec:engine}, Exhibit~\ref{sec:ex_packaging}).
+  \item \textbf{Budgeted viability:} does there exist a robust controlled-invariant safe set $\K$ under ledger-gated feasibility? We measure this with the viability kernel size $|\K|$ (Section~\ref{sec:engine}, Exhibit~\ref{sec:ex_packaging} and the sweep).
+  \item \textbf{Difference-making:} does the interface admit more than one feasible policy that produces distinct outside futures? We measure this with feasible empowerment (channel capacity restricted by budgets and costs) (Section~\ref{sec:engine}, Exhibit~\ref{sec:ex_learning} and the holonomy plot).
+\end{itemize}
+These three proxies are deliberately orthogonal: packaging can exist without control, control without persistence is fragile, and persistence without budgets is not autonomous.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}p{0.13\linewidth} p{0.37\linewidth} p{0.42\linewidth}@{}}
+\toprule
+\textbf{Primitive} & \textbf{Agency role (interpretation)} & \textbf{Operationalization in this paper (metric / artifact)} \\
+\midrule
+P$_1$ Operator-write &
+\emph{Skill / learning as induced law change.} The agent rewrites its effective transition operator so the same interface moves become more reliable or cheaper. &
+A discrete skill variable $\theta$ reduces slip/noise in the ring-world dynamics. We measure increased difference-making as higher feasible empowerment at larger $\theta$ (learning--$\theta$ plot and medians). \\[0.35em]
+
+P$_2$ Feasible-set-write &
+\emph{Constraints define action.} ``Actions'' are moves inside an admissible set; infeasible interface commands collapse to no-ops. &
+Ledger-gated feasibility: an action executes only if $r \ge \mathrm{cost}(a)$. We compute feasible empowerment by filtering sequences by budget and compute viability under feasible actions. Ablation: \texttt{constraints\_off}. \\[0.35em]
+
+P$_3$ Protocol cycle (holonomy) &
+\emph{Order matters.} Noncommuting interface moves create reachability that is invisible at one step but emerges over horizons. &
+A phase-dependent displacement makes LEFT/RIGHT noncommutative across time when protocol is ON. Evidence: empowerment vs horizon $H$ shows a gap for $H\ge 2$ (holonomy plot). \\[0.35em]
+
+P$_4$ Quantized identity / staging &
+\emph{Robust tokens and horizons.} Discrete identity/staging variables support persistent reference frames and meaningful time scales. &
+The environment includes discrete sectors (identity $g$ and phase $\phi$) that are invariant/staged. This supplies a stable tokenization of ``who'' and ``when''; it also explains why certain horizons cannot be idempotent when the lens includes $\phi$. \\[0.35em]
+
+P$_5$ Order-theoretic closure &
+\emph{Packaging as a maintained equivalence.} A closure induces macro variables that behave like objects under coarse lenses. &
+Viability kernel $\K$ as a greatest fixed point under robust support semantics, plus packaging endomap $E$ whose idempotence defect quantifies objecthood for lenses that ignore microstate (packaging figure; Lean fixed-point lemma anchors the iteration). \\[0.35em]
+
+P$_6$ Resource transduction / accounting &
+\emph{Autonomy as paying for persistence.} Resources are stored and spent to maintain boundary and repair noise-induced damage. &
+Ledger $r$ and maintenance action REPAIR convert budget into stability: repair collapses packaging defect and sustains viability under noise. Evidence: packaging ring (defect drop) and noise--maintenance sweep heatmaps. \\
+\bottomrule
+\end{tabular}
+\caption{Dictionary from the six emergence primitives (\SBT) to agency roles and the corresponding operational metrics/artifacts used in this paper. Each row should be read as: ``if this primitive is absent or weakened, a specific aspect of agenthood/agency degrades in a characteristic way.''}
+\label{tab:dictionary}
+\end{table}
+
+\paragraph{Guardrails (null regimes).}
+Finally, we emphasize a methodological point already present in the \SBT\ program (\citep{six_birds_life}): induced notions are only meaningful if they survive obvious adversarial baselines. We therefore include two null regimes: (i) a single-action system yields zero empowerment for all horizons, and (ii) an exogenous schedule can fake empowerment if it is incorrectly treated as a controllable choice rather than as state/noise. These baselines are part of the evidence suite, not afterthoughts.
