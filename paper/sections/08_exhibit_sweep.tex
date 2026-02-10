@@ -26,7 +26,7 @@ At each grid point we compute two quantities from Section~\ref{sec:engine}:
 If $\K=\emptyset$, empowerment is defined as $0$ by convention (no viable states, hence no induced agent layer).
 
 \subsection{Result: a collapse boundary in $(p_{\mathrm{flip}}, \mathrm{cost})$ space}
-Figure~\ref{fig:sweep_heatmaps} shows the two heatmaps. The qualitative story is simple:
+Figure~\ref{fig:sweep_heatmaps} shows the two heatmaps. The qualitative picture is straightforward:
 \begin{itemize}[leftmargin=*, itemsep=0.25em]
   \item Increasing noise $p_{\mathrm{flip}}$ makes it harder to keep $u=0$ in the robust-support sense: all nonzero-probability successors must remain safe.
   \item Increasing repair cost shrinks the feasible action set $A_{\mathrm{feas}}(s)$ (Section~\ref{sec:engine}), eventually making it impossible to guarantee repair when damage occurs.
