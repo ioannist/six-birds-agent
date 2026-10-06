@@ -33,6 +33,26 @@ class RingAgentConfig:
     cost_repair: int = 1
     cost_learn: int = 1
 
+    def __post_init__(self) -> None:
+        for name in ("L", "m_phase", "g_size"):
+            value = getattr(self, name)
+            if not isinstance(value, (int, np.integer)) or value < 1:
+                raise ValueError(f"{name} must be a positive integer")
+        for name in ("R_max", "theta_max", "gain_amount", "maint_cost",
+                     "cost_left", "cost_right", "cost_repair", "cost_learn"):
+            value = getattr(self, name)
+            if not isinstance(value, (int, np.integer)) or value < 0:
+                raise ValueError(f"{name} must be a non-negative integer")
+        for name in ("p_flip", "p_slip", "p_repair"):
+            value = getattr(self, name)
+            if not np.isfinite(value) or not 0 <= value <= 1:
+                raise ValueError(f"{name} must be a finite probability in [0,1]")
+        if not np.isfinite(self.slip_improve_per_theta) or self.slip_improve_per_theta < 0:
+            raise ValueError("slip_improve_per_theta must be finite and non-negative")
+        if any(not isinstance(y, (int, np.integer)) or not 0 <= y < self.L
+               for y in self.gain_positions):
+            raise ValueError("gain_positions must be integer positions on the ring")
+
 
 def _clip01(value: float) -> float:
     return min(1.0, max(0.0, value))
@@ -72,7 +92,7 @@ def build_kernel(
         for u in range(2):
             for phi in range(config.m_phase):
                 for r in range(config.R_max + 1):
-                    for g in range(config.g_size):
+                    for g in range(config.g_size if config.identity_on else 1):
                         for theta in range(config.theta_max + 1):
                             state_tuples.append((y, u, phi, r, g, theta))
 
@@ -166,10 +186,9 @@ def build_kernel(
             "L": config.L,
             "m_phase": config.m_phase,
             "R_max": config.R_max,
-            "g_size": config.g_size,
+            "g_size": config.g_size if config.identity_on else 1,
             "theta_max": config.theta_max,
         },
     }
 
     return kernel, projections, metadata
-

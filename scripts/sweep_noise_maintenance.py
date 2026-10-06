@@ -129,6 +129,12 @@ def main() -> int:
     meta = {
         "base_config": asdict(base_cfg),
         "safe": "r>=1 and u==0",
+        "empowerment_H": 2,
+        "max_states": 16,
+        "sample_rule": "first 16 states in sorted K",
+        "capacity_tol_nats": 1e-6,
+        "capacity_max_iter": 500,
+        "feasibility": "sum of action costs <= initial ledger; no safety restriction",
         "run_id": run_id,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "versions": {

@@ -31,10 +31,13 @@ def _validate_kernel_P(P: Any, path: Path, issues: list[dict]) -> None:
     if arr.ndim != 3:
         _add_issue(issues, "error", path, "kernel P must be 3D")
         return
+    if 0 in arr.shape or arr.shape[1] != arr.shape[2]:
+        _add_issue(issues, "error", path, "kernel P must have nonempty square state dimensions")
+        return
     if not np.all(np.isfinite(arr)):
         _add_issue(issues, "error", path, "kernel P contains non-finite values")
         return
-    if np.any(arr < -1e-12):
+    if np.any(arr < 0):
         _add_issue(issues, "error", path, "kernel P has negative entries")
         return
     row_sums = arr.sum(axis=2)
@@ -197,7 +200,7 @@ def _validate_metrics_run(data: dict, path: Path, issues: list[dict], strict: bo
             _add_issue(issues, level, path, "metrics.config_hash mismatch")
     if "idempotence_defect" in data["metrics"]:
         val = float(data["metrics"]["idempotence_defect"])
-        if val < -1e-9 or val > 1.0 + 1e-9:
+        if not math.isfinite(val) or val < -1e-9 or val > 1.0 + 1e-9:
             _add_issue(issues, "error", path, "idempotence_defect out of range")
     if "empowerment_median_on_K" in data["metrics"]:
         val = float(data["metrics"]["empowerment_median_on_K"])
@@ -209,11 +212,51 @@ def _validate_metrics_run(data: dict, path: Path, issues: list[dict], strict: bo
             _add_issue(issues, "error", path, "kernel_size_viable invalid")
 
 
+def _validate_sweep_npz(path: Path, issues: list[dict]) -> None:
+    """Validate the actual NPZ sweep, without treating schema checks as proofs."""
+    try:
+        with np.load(path, allow_pickle=False) as data:
+            required = {"p_flip_values", "repair_cost_values", "K_size", "emp_median", "meta_json"}
+            if not required <= set(data.files):
+                raise ValueError("sweep is missing required arrays")
+            noise, costs = data["p_flip_values"], data["repair_cost_values"]
+            K, E = data["K_size"], data["emp_median"]
+            meta = json.loads(str(data["meta_json"].item()))
+            if noise.ndim != 1 or costs.ndim != 1 or not noise.size or not costs.size:
+                raise ValueError("sweep axes must be nonempty vectors")
+            if K.shape != (len(noise), len(costs)) or E.shape != K.shape:
+                raise ValueError("sweep metric shapes must match the axes")
+            if not all(np.all(np.isfinite(a)) for a in (noise, costs, K, E)):
+                raise ValueError("sweep contains non-finite values")
+            if np.any((noise < 0) | (noise > 1)) or np.any(costs < 0) or np.any(costs != np.floor(costs)):
+                raise ValueError("sweep axes are outside probability/cost domains")
+            base = meta["base_config"]
+            if np.any(K < 0) or np.any(K != np.floor(K)):
+                raise ValueError("sweep viability sizes must be non-negative integers")
+            n_states = (base["L"] * 2 * base["m_phase"] * (base["R_max"] + 1)
+                        * (base["g_size"] if base["identity_on"] else 1) * (base["theta_max"] + 1))
+            if np.any(K > n_states) or np.any(E < -1e-12) or np.any(E > math.log2(base["L"]) + 1e-9):
+                raise ValueError("sweep metrics exceed state/output cardinality bounds")
+            if np.any(np.abs(E[K == 0]) > 1e-12):
+                raise ValueError("empty-K sweep entries must have zero empowerment by convention")
+            expected = stable_hash({"base_config": base, "p_flip_values": noise.tolist(),
+                                    "repair_cost_values": costs.tolist(), "safe": meta["safe"],
+                                    "H": meta.get("empowerment_H", 2), "N": meta.get("max_states", 16)})
+            if expected != meta["run_id"]:
+                raise ValueError("sweep run_id does not match config and axes")
+            _check_timestamp_and_versions(meta, path, issues)
+    except Exception as exc:
+        _add_issue(issues, "error", path, f"invalid sweep NPZ: {exc}")
+
+
 def audit_results(root: str | Path, strict: bool = False) -> dict:
     root_path = Path(root)
     details: list[dict] = []
 
     if not root_path.exists():
+        if strict:
+            _add_issue(details, "error", root_path, "results directory does not exist")
+            return {"checked": 0, "errors": 1, "warnings": 0, "details": details}
         return {"checked": 0, "errors": 0, "warnings": 0, "details": details}
 
     json_files = list(root_path.rglob("*.json"))
@@ -251,6 +294,11 @@ def audit_results(root: str | Path, strict: bool = False) -> dict:
         elif "kernel" in raw and isinstance(raw["kernel"], dict) and "P" in raw["kernel"]:
             _validate_kernel_P(raw["kernel"]["P"], path, details)
 
+    for path in root_path.rglob("*.npz"):
+        checked += 1
+        _validate_sweep_npz(path, details)
+    if strict and checked == 0:
+        _add_issue(details, "error", root_path, "no results artifacts found")
     errors = sum(1 for d in details if d["level"] == "error")
     warnings = sum(1 for d in details if d["level"] == "warning")
     return {"checked": checked, "errors": errors, "warnings": warnings, "details": details}

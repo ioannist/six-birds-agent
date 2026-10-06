@@ -26,11 +26,11 @@ def _validate_policy_output(
         raise ValueError("policy distribution has wrong shape")
     if not np.all(np.isfinite(probs)):
         raise ValueError("policy distribution must be finite")
-    if np.any(probs < -atol):
+    if np.any(probs < 0):
         raise ValueError("policy distribution has negative entries")
     if not np.isclose(probs.sum(), 1.0, atol=atol, rtol=0.0):
         raise ValueError("policy distribution must sum to 1 within tolerance")
-    return probs
+    return probs / probs.sum()
 
 
 def empirical_endomap(
@@ -41,9 +41,17 @@ def empirical_endomap(
     *,
     macro_labels: Sequence[int] | None = None,
 ) -> dict[int, int]:
-    """Compute an empirical endomap on macro labels under a stationary policy."""
+    """Numerical modal endomap of uniform macro fibers under a fixed policy.
+
+    macro_labels, when supplied, must be the full realized image of proj.
+    Modes use floating probabilities and the smallest label on exact floating
+    ties. Idempotence of this modal map does not imply stochastic lumpability,
+    support invariance, or equality with a continuous rollout of length 2*tau:
+    composition restarts from a uniform micro-fiber at the selected label.
+    """
     if tau < 0:
         raise ValueError("tau must be non-negative")
+    kernel.validate()
 
     n_states = kernel.n_states
     n_actions = kernel.n_actions
@@ -63,7 +71,13 @@ def empirical_endomap(
     if macro_labels is None:
         label_list = sorted(set(labels))
     else:
+        if any(not isinstance(x, (int, np.integer)) for x in macro_labels):
+            raise ValueError("macro_labels must be integers")
         label_list = sorted(int(x) for x in macro_labels)
+        if len(label_list) != len(set(label_list)):
+            raise ValueError("macro_labels must be distinct")
+        if set(label_list) != set(labels):
+            raise ValueError("macro_labels must equal the realized projection image")
 
     label_to_states: dict[int, list[int]] = {x: [] for x in label_list}
     for s, x in enumerate(state_labels.tolist()):
@@ -109,4 +123,3 @@ def idempotence_defect(E: Mapping[int, int]) -> float:
         if E[y] != y:
             count += 1
     return count / len(keys)
-

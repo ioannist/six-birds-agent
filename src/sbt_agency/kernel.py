@@ -28,11 +28,17 @@ class FiniteKernel:
 
     def validate(self, atol: float = 1e-12) -> None:
         """Validate nonnegativity and row-stochasticity."""
+        if not np.isfinite(atol) or atol < 0:
+            raise ValueError("atol must be finite and non-negative")
         if self.P.ndim != 3:
             raise ValueError("P must be a 3D array with shape (n_actions, n_states, n_states)")
         if self.P.shape[1] != self.P.shape[2]:
             raise ValueError("P must have shape (n_actions, n_states, n_states)")
-        if np.any(self.P < -atol):
+        if 0 in self.P.shape:
+            raise ValueError("state and action spaces must be nonempty")
+        if not np.all(np.isfinite(self.P)):
+            raise ValueError("P must contain only finite probabilities")
+        if np.any(self.P < 0):
             raise ValueError("P contains negative probabilities")
         row_sums = self.P.sum(axis=2)
         if not np.allclose(row_sums, 1.0, atol=atol, rtol=0.0):
@@ -67,4 +73,3 @@ class FiniteKernel:
         for action in action_seq:
             dist = self.step_dist(dist, int(action))
         return dist
-

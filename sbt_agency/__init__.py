@@ -2,20 +2,8 @@
 
 from __future__ import annotations
 
-import importlib
-import os
-import sys
+from pathlib import Path
 
-REPO_ROOT = os.path.dirname(os.path.dirname(__file__))
-SRC_PATH = os.path.join(REPO_ROOT, "src")
-
-if SRC_PATH not in sys.path:
-    sys.path.insert(0, SRC_PATH)
-
-REAL_PKG = os.path.join(SRC_PATH, "sbt_agency", "__init__.py")
-if os.path.isfile(REAL_PKG):
-    sys.modules.pop(__name__, None)
-    _module = importlib.import_module(__name__)
-    sys.modules[__name__] = _module
-    globals().update(_module.__dict__)
-
+# Resolve submodules directly. Reimporting this package after removing it from
+# sys.modules recurses when src is already on sys.path behind the repository.
+__path__ = [str(Path(__file__).resolve().parents[1] / "src" / "sbt_agency")]

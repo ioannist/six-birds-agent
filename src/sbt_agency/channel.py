@@ -21,11 +21,13 @@ def _validate_dist(dist: np.ndarray, n_states: int, atol: float = 1e-12) -> np.n
     dist = np.asarray(dist, dtype=float)
     if dist.ndim != 1 or dist.shape[0] != n_states:
         raise ValueError("s0 distribution must be a 1D array of shape (n_states,)")
-    if np.any(dist < -atol):
+    if not np.all(np.isfinite(dist)):
+        raise ValueError("s0 distribution must be finite")
+    if np.any(dist < 0):
         raise ValueError("s0 distribution has negative entries")
     if not np.isclose(dist.sum(), 1.0, atol=atol, rtol=0.0):
         raise ValueError("s0 distribution must sum to 1 within tolerance")
-    return dist
+    return dist / dist.sum()
 
 
 def build_channel_matrix(
@@ -35,11 +37,15 @@ def build_channel_matrix(
     proj: Callable[[int], int],
 ) -> np.ndarray:
     """Build a channel matrix over projected outputs for action sequences."""
+    kernel.validate()
     n_states = kernel.n_states
 
     out_idx = np.zeros(n_states, dtype=int)
     for s in range(n_states):
-        y = int(proj(s))
+        label = proj(s)
+        if not isinstance(label, (int, np.integer)):
+            raise ValueError("proj must return integer output indices")
+        y = int(label)
         if y < 0:
             raise ValueError("proj must return non-negative output indices")
         out_idx[s] = y
@@ -62,4 +68,3 @@ def build_channel_matrix(
         raise ValueError("Rows of W must sum to 1 within tolerance")
 
     return W
-

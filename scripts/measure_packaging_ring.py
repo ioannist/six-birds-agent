@@ -24,6 +24,7 @@ from sbt_agency.env_ring_agent import build_kernel
 from sbt_agency.exp_configs import cfg_packaging_ring_off, cfg_packaging_ring_on
 from sbt_agency.packaging import empirical_endomap, idempotence_defect
 from sbt_agency.repro import stable_hash
+from sbt_agency.viability import ledger_feasible_actions, post_support_from_kernel, viability_kernel
 
 
 def _policy_right(action_idx_right: int):
@@ -33,13 +34,15 @@ def _policy_right(action_idx_right: int):
     return policy
 
 
-def _policy_repair_then_right(action_idx_repair: int | None, action_idx_right: int, state_tuples):
-    def policy(s_idx: int) -> int:
-        y, u, phi, r, g, theta = state_tuples[s_idx]
-        if action_idx_repair is not None and u == 1:
-            return action_idx_repair
-        return action_idx_right
+def _policy_funded_preventive_repair(action_idx_repair, action_idx_right, state_tuples, cost_repair):
+    """Pay for preventive repair whenever affordable; otherwise move RIGHT.
 
+    The matched substrate earns one unit per step, so funded states can keep
+    paying indefinitely. No rejected command is used as an idle action.
+    """
+    def policy(s_idx: int) -> int:
+        r = state_tuples[s_idx][3]
+        return action_idx_repair if r >= cost_repair else action_idx_right
     return policy
 
 
@@ -49,6 +52,15 @@ def _compute_defects(kernel, proj_macro, policy, tau_list):
         E = empirical_endomap(kernel, proj_macro, tau=tau, policy=policy)
         defects.append(idempotence_defect(E))
     return defects
+
+
+def _coherent_viability(cfg, kernel, metadata):
+    states = metadata["state_tuples"]
+    cost_by_name = {"LEFT": cfg.cost_left, "RIGHT": cfg.cost_right, "REPAIR": cfg.cost_repair}
+    cost = lambda a: cost_by_name[metadata["action_names"][a]]
+    feasible = ledger_feasible_actions(range(kernel.n_actions), lambda s: states[s][3], cost)
+    return viability_kernel(range(kernel.n_states), range(kernel.n_actions), feasible,
+                            post_support_from_kernel(kernel), lambda s: states[s][3] >= 1 and states[s][1] == 0)
 
 
 def main() -> int:
@@ -69,11 +81,15 @@ def main() -> int:
     repair_idx_on = action_names_on.index("REPAIR") if "REPAIR" in action_names_on else None
 
     policy_off = _policy_right(right_idx_off)
-    policy_on = _policy_repair_then_right(repair_idx_on, right_idx_on, metadata_on["state_tuples"])
+    policy_on = _policy_funded_preventive_repair(
+        repair_idx_on, right_idx_on, metadata_on["state_tuples"], cfg_on.cost_repair
+    )
 
     tau_list = list(range(1, 11))
     defects_off = _compute_defects(kernel_off, proj_macro_off, policy_off, tau_list)
     defects_on = _compute_defects(kernel_on, proj_macro_on, policy_on, tau_list)
+    coherent_K_off = _coherent_viability(cfg_off, kernel_off, metadata_off)
+    coherent_K_on = _coherent_viability(cfg_on, kernel_on, metadata_on)
 
     config_hash_off = stable_hash(asdict(cfg_off))
     config_hash_on = stable_hash(asdict(cfg_on))
@@ -93,6 +109,12 @@ def main() -> int:
         "tau_list": tau_list,
         "defect_off": defects_off,
         "defect_on": defects_on,
+        "policy_on_semantics": "paid preventive REPAIR whenever affordable; otherwise RIGHT",
+        "funding": "one unit income each step at every site; REPAIR costs one unit",
+        "coherent_safety": "r>=1 and u==0",
+        "coherent_K_off": sorted(coherent_K_off),
+        "coherent_K_on": sorted(coherent_K_on),
+        "scope": "modal idempotence under specified policies; it does not alone imply stochastic closure or repair necessity",
         "lens": "proj_macro = (y,r,phi) encoded as int",
         "versions": {
             "python": platform.python_version(),
@@ -104,7 +126,7 @@ def main() -> int:
 
     plt.figure(figsize=(6, 4))
     plt.plot(tau_list, defects_off, marker="o", label="repair OFF")
-    plt.plot(tau_list, defects_on, marker="o", label="repair ON")
+    plt.plot(tau_list, defects_on, marker="o", label="funded preventive repair ON")
     plt.xlabel("tau")
     plt.ylabel("idempotence defect")
     plt.ylim(-0.05, 1.05)

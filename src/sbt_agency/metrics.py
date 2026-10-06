@@ -104,6 +104,8 @@ def compute_ring_metrics(
     seed: int = 0,
 ) -> dict[str, float | int | str | dict | list]:
     """Compute viability, empowerment, and packaging metrics for a ring config."""
+    if empowerment_max_states < 1:
+        raise ValueError("empowerment_max_states must be positive")
     set_global_seed(seed)
     kernel, projections, metadata = build_kernel(config)
 
@@ -130,6 +132,8 @@ def compute_ring_metrics(
 
     K = viability_kernel(states, actions, feasible_actions, post_support, safe)
     kernel_size_viable = len(K)
+    sample_states = np.array([], dtype=int)
+    caps: list[float] = []
 
     if not K:
         empowerment_median_on_K = 0.0
@@ -172,4 +176,19 @@ def compute_ring_metrics(
         "idempotence_defect": defect,
         "config": config_dict,
         "action_names": list(action_names),
+        "measurement_contract": {
+            "safe": f"r >= {safe_r_min}",
+            "empowerment_H": empowerment_H,
+            "output_lens": "y",
+            "feasibility": "sum of action costs <= initial ledger; no safety restriction",
+            "sampling": "seeded uniform sample without replacement from sorted K",
+            "seed": seed,
+            "sample_state_indices": sample_states.tolist(),
+            "sample_capacity_bits": caps,
+            "capacity_tol_nats": 1e-12,
+            "capacity_arithmetic": "floating; numerical lower-upper gap, not interval certified",
+            "packaging_tau": packaging_tau,
+            "packaging_lens": "(y,r,phi), uniform over the full fiber",
+            "empty_K_empowerment": "0 by reporting convention",
+        },
     }

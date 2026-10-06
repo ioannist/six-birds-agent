@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Hashable, Iterable, Sequence
+from collections.abc import Hashable, Iterable, Iterator, Sequence
 import math
 from typing import Callable
 
@@ -15,21 +15,21 @@ def ledger_feasible_actions(
     actions: Sequence[Hashable],
     ledger: Callable[[Hashable], float],
     cost: Callable[[Hashable], float],
-    eps: float = 1e-12,
+    eps: float = 0.0,
 ) -> Callable[[Hashable], list]:
-    """Return a feasible-actions function gated by a ledger value."""
-    if eps < 0:
-        raise ValueError("eps must be non-negative")
+    """Return ledger-gated actions; positive eps explicitly relaxes the gate."""
+    if not math.isfinite(eps) or eps < 0:
+        raise ValueError("eps must be finite and non-negative")
 
     def feasible_actions(s: Hashable) -> list:
         available = ledger(s)
-        if not math.isfinite(available):
-            raise ValueError("ledger value must be finite")
+        if not math.isfinite(available) or available < 0:
+            raise ValueError("ledger value must be finite and non-negative")
         allowed: list = []
         for a in actions:
             c = float(cost(a))
-            if c < 0:
-                raise ValueError("action cost must be non-negative")
+            if not math.isfinite(c) or c < 0:
+                raise ValueError("action cost must be finite and non-negative")
             if c <= available + eps:
                 allowed.append(a)
         return allowed
@@ -40,14 +40,17 @@ def ledger_feasible_actions(
 def post_support_from_kernel(
     kernel: FiniteKernel, atol: float = 0.0
 ) -> Callable[[int, int], set[int]]:
-    """Build a post_support function from a FiniteKernel transition tensor."""
-    if atol < 0:
-        raise ValueError("atol must be non-negative")
+    """Positive support. Positive atol instead models a truncated support law."""
+    kernel.validate()
+    if not math.isfinite(atol) or atol < 0:
+        raise ValueError("atol must be finite and non-negative")
     support: list[list[set[int]]] = []
     for a in range(kernel.n_actions):
         action_support: list[set[int]] = []
         for s in range(kernel.n_states):
             succ = set(np.where(kernel.P[a, s] > atol)[0])
+            if not succ:
+                raise ValueError("support truncation removed all successors")
             action_support.append(succ)
         support.append(action_support)
 
@@ -64,23 +67,14 @@ def viability_kernel(
     post_support: Callable[[Hashable, Hashable], set],
     safe: Callable[[Hashable], bool],
 ) -> set:
-    """Compute the viability kernel as the greatest fixed point."""
-    K = {s for s in states if safe(s)}
+    """Greatest safe controlled-invariant set for fixed callbacks.
 
-    while True:
-        next_K = set()
-        for s in K:
-            ok = False
-            for a in feasible_actions(s):
-                succ = post_support(s, a)
-                if succ.issubset(K):
-                    ok = True
-                    break
-            if ok:
-                next_K.add(s)
-        if next_K == K:
-            return next_K
-        K = next_K
+    Callbacks must depend only on their arguments, not on the iteration index.
+    Successor sets must be nonempty, as for a stochastic kernel.
+    """
+    for K in _viability_iterates(states, actions, feasible_actions, post_support, safe):
+        pass
+    return K
 
 
 def viability_kernel_history(
@@ -91,21 +85,36 @@ def viability_kernel_history(
     safe: Callable[[Hashable], bool],
 ) -> list[set]:
     """Return the descending sequence of kernel iterates, including the fixed point."""
+    return list(_viability_iterates(states, actions, feasible_actions, post_support, safe))
+
+
+def _viability_iterates(
+    states: Sequence[Hashable],
+    actions: Sequence[Hashable],
+    feasible_actions: Callable[[Hashable], Iterable[Hashable]],
+    post_support: Callable[[Hashable, Hashable], set],
+    safe: Callable[[Hashable], bool],
+) -> Iterator[set]:
     K = {s for s in states if safe(s)}
-    history = [set(K)]
+    yield K
+    action_set = set(actions)
 
     while True:
         next_K = set()
         for s in K:
             ok = False
             for a in feasible_actions(s):
+                if a not in action_set:
+                    raise ValueError("feasible action is outside the action alphabet")
                 succ = post_support(s, a)
+                if not succ:
+                    raise ValueError("post_support must be nonempty for stochastic viability")
                 if succ.issubset(K):
                     ok = True
                     break
             if ok:
                 next_K.add(s)
-        history.append(set(next_K))
+        yield next_K
         if next_K == K:
-            return history
+            return
         K = next_K

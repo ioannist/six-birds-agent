@@ -11,7 +11,8 @@ from sbt_agency.env_ring_agent import RingAgentConfig
 from sbt_agency.repro import stable_hash
 
 
-def cfg_packaging_ring_off() -> RingAgentConfig:
+def cfg_packaging_ring_legacy_off() -> RingAgentConfig:
+    """Original unfunded setup, retained for diagnosing rejected-command idling."""
     return RingAgentConfig(
         L=8,
         m_phase=2,
@@ -34,6 +35,21 @@ def cfg_packaging_ring_off() -> RingAgentConfig:
         cost_repair=1,
         cost_learn=0,
     )
+
+
+def cfg_packaging_ring_legacy_on() -> RingAgentConfig:
+    return replace(cfg_packaging_ring_legacy_off(), enable_repair=True)
+
+
+def cfg_packaging_ring_off() -> RingAgentConfig:
+    """Matched funded substrate for lawful paid preventive maintenance.
+
+    Each step earns one unit at every site. An affordable REPAIR pays one
+    unit, leaves the position unchanged, and restores coherence. The funded
+    states r=1 therefore sustain repair indefinitely. Movement costs zero.
+    """
+    cfg = cfg_packaging_ring_legacy_off()
+    return replace(cfg, gain_positions=tuple(range(cfg.L)), gain_amount=1)
 
 
 def cfg_packaging_ring_on() -> RingAgentConfig:
@@ -86,11 +102,13 @@ def ablations_suite() -> Dict[str, RingAgentConfig]:
     suite["constraints_off"] = RingAgentConfig(
         **{**base, "cost_left": 0, "cost_right": 0, "cost_repair": 0, "cost_learn": 0},
         enable_protocol=True,
-        enable_repair=False,
+        enable_repair=True,
         enable_learn=False,
         theta_max=0,
         identity_on=True,
     )
+    # Preserve the original combined intervention under an explicit name.
+    suite["constraints_off_no_repair"] = replace(suite["constraints_off"], enable_repair=False)
     suite["learn_on"] = RingAgentConfig(
         **base,
         enable_protocol=True,

@@ -84,3 +84,32 @@ def test_audit_results_strict(tmp_path):
     assert result["checked"] == 4
     assert result["errors"] == 0
     assert result["warnings"] == 0
+
+
+def test_strict_audit_rejects_missing_or_empty_results(tmp_path):
+    assert audit_results(tmp_path / 'absent', strict=True)['errors'] == 1
+    assert audit_results(tmp_path, strict=True)['errors'] == 1
+
+
+def test_audit_rejects_nonfinite_packaging_defect(tmp_path):
+    _write_json(tmp_path / 'bad.json', {
+        'config': {}, 'config_hash': stable_hash({}),
+        'metrics': {'idempotence_defect': float('nan')},
+        'timestamp': 'now', 'versions': {},
+    })
+    assert audit_results(tmp_path, strict=True)['errors'] == 1
+
+
+def test_audit_checks_sweep_npz_instead_of_skipping_it(tmp_path):
+    base = {'L': 2, 'm_phase': 1, 'R_max': 1, 'g_size': 1, 'identity_on': True, 'theta_max': 0}
+    axes = {'base_config': base, 'p_flip_values': [0.0], 'repair_cost_values': [0],
+            'safe': 'r>=1 and u==0', 'H': 2, 'N': 16}
+    meta = {'base_config': base, 'safe': axes['safe'], 'run_id': stable_hash(axes),
+            'timestamp': 'now', 'versions': {}}
+    kwargs = dict(p_flip_values=np.array([0.0]), repair_cost_values=np.array([0]),
+                  K_size=np.array([[1.]]), meta_json=json.dumps(meta))
+    np.savez(tmp_path / 'sweep.npz', emp_median=np.array([[0.5]]), **kwargs)
+    result = audit_results(tmp_path, strict=True)
+    assert result['checked'] == 1 and result['errors'] == 0
+    np.savez(tmp_path / 'sweep.npz', emp_median=np.array([[float('nan')]]), **kwargs)
+    assert audit_results(tmp_path, strict=True)['errors'] == 1

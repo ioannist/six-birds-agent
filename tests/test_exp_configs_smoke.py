@@ -31,11 +31,11 @@ def test_exp_config_hash_locks():
     on = cfg_packaging_ring_on()
     assert (
         stable_hash(asdict(off))
-        == "a6cb93244f7b9ea35a3becdee4fc19bd7ceea6c5288fa35a145ec2e5f111b035"
+        == "f9433cc76ea28c391bb86a42bc23c2d9251e0a50ff408e57b370879e198e96c0"
     )
     assert (
         stable_hash(asdict(on))
-        == "df5dc0d3aeb20f7a90789a55f11bd1d96e6a1c10187ba028b939d631564f4892"
+        == "053a3f71506d8b061041de4078382e4a8a676f0eb9a27e65e8e8fe2bcb8aa695"
     )
 
     suite = ablations_suite()
@@ -43,7 +43,8 @@ def test_exp_config_hash_locks():
         "full": "6a3a640708dd552b56d217960cc950ce1134ddf896aa0a761aea589362cbbdd3",
         "no_protocol": "c65aaf545518534638f34842585ed24da87fd9c9172897857f5ca93984fff681",
         "no_repair": "d08950d1fa3ed9aaea8a3b81c89b474793a9763e52b5f73ce3cd729d39564414",
-        "constraints_off": "6dd35428192b34e65d676d310211abbb4f3851af1c1aac06026e04cee696f47e",
+        "constraints_off": "7de906250ed8246c356a5a7b721c2bad499045903ec5092da049ae91b6005545",
+        "constraints_off_no_repair": "6dd35428192b34e65d676d310211abbb4f3851af1c1aac06026e04cee696f47e",
         "learn_on": "a3a79deb23e7b3e4a4e6cdab47af41a048fa7635b4a33b202da6434660613879",
         "high_noise": "accd757af2ba4d36ed8f261321e534bc278603d75a23a8ad6e7dc3056863db89",
         "repair_imperfect": "e8ec106b76f6ca1bfffa513fcf068d045fb9c90198d6929259d44b1e41f62b74",
@@ -55,4 +56,3 @@ def test_exp_config_hash_locks():
         sweep_noise_maintenance_run_id()
         == "1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45"
     )
-
