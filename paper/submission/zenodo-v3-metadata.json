@@ -1,0 +1,96 @@
+{
+  "title": "To Throw a Stone with Six Birds: On Agents and Agenthood",
+  "description": "<p><strong>To Throw a Stone with Six Birds: On Agents and Agenthood</strong> asks what it takes for a system to have choices that make a difference. It studies the question in finite controlled Markov kernels, without assuming goals, utilities, or an inner agent. Following Six Birds Theory (SBT), an agent is treated as a <em>theory object</em>: a package that is maintained inside an induced description of the system and that has a budgeted interface to the rest of the world. This separates <strong>agenthood</strong>, the existence and persistence of such a package, from <strong>agency</strong>, the ability of its interface choices to change what happens outside.</p>\n<p>Three computable measures make the distinction concrete:</p>\n<ul>\n<li><strong>Viability kernel</strong>: the largest set of safe states in which every state has an affordable action whose possible successors all remain in the set.</li>\n<li><strong>Feasible empowerment</strong>: the channel capacity from affordable action sequences to a later outside variable.</li>\n<li><strong>Packaging defect</strong>: the idempotence defect of a coarse-grained packaging map.</li>\n</ul>\n<p><strong>Main results</strong></p>\n<ul>\n<li>Null tests: a single-action system has zero empowerment, and an external schedule mistaken for an action yields a spurious 1 bit.</li>\n<li>With funded preventive repair, the packaging defect at a full phase cycle falls from 1 to 0 and the set of states that can be kept coherent grows from empty to 16; controls show that a zero defect alone does not identify maintenance.</li>\n<li>A phase-dependent step (protocol holonomy) leaves one-step empowerment unchanged but raises the sampled median at two steps from 1.21 to 1.72 bits.</li>\n<li>Reducing slip through a skill variable raises median empowerment from 0.84 to 1.37 bits.</li>\n<li>With coherence required for safety, viability shows a change of support at zero noise and a repair-cost threshold set by the available income.</li>\n<li>A Lean 4 development proves that the viability iteration reaches the greatest safe controlled-invariant set after at most as many strict removals as there are safe states.</li>\n</ul>\n<p>All results are finite witnesses produced by deterministic, audited scripts. Code, experiment configurations, tests, and the Lean development are available at <a href=\"https://github.com/ioannist/six-birds-agent\">github.com/ioannist/six-birds-agent</a> and archived at <a href=\"https://doi.org/10.5281/zenodo.18451887\">10.5281/zenodo.18451887</a>.</p>",
+  "publication_date": "2026-10-06",
+  "version": "Preprint v3.0",
+  "keywords": [
+    "agency",
+    "agenthood",
+    "theory objects",
+    "counterfactual intervention",
+    "viability kernels",
+    "controlled invariance",
+    "empowerment",
+    "channel capacity",
+    "finite-state systems",
+    "autonomous systems",
+    "Lean 4",
+    "emergence calculus",
+    "Six Birds Theory"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.18365949",
+      "relation": "cites",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.18420406",
+      "relation": "cites",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1109/TIT.1972.1054855",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1109/TIT.1972.1054753",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1109/CEC.2005.1554676",
+      "relation": "cites",
+      "resource_type": "publication-conferencepaper",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "978-0-8176-3571-8",
+      "relation": "cites",
+      "resource_type": "publication-book",
+      "scheme": "isbn"
+    },
+    {
+      "identifier": "10.2140/pjm.1955.5.285",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1007/978-3-030-79876-5_37",
+      "relation": "cites",
+      "resource_type": "publication-conferencepaper",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.48550/arXiv.1910.09336",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1002/j.1538-7305.1948.tb01338.x",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.18451887",
+      "relation": "isSupplementedBy",
+      "resource_type": "software",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "https://github.com/ioannist/six-birds-agent",
+      "relation": "isSupplementedBy",
+      "resource_type": "software",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Version 3 (6 October 2026). The capacity computation uses the standard Blahut-Arimoto update with explicit lower and upper stopping bounds, and all empowerment values were recomputed; the packaging experiment uses a funded substrate with controls; the order-dependence witness is reported with and without damage noise; the cost-only and combined cost-and-repair ablations are distinguished; the Lean development covers the viability operator itself with an iteration bound; the exposition, figures, and tables were revised throughout. See the version-history appendix of the paper."
+}

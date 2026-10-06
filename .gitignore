@@ -35,3 +35,46 @@ paper/build/*.synctex.gz
 paper/build/**
 !paper/build/.gitkeep
 paper/arxiv_upload.tar.gz
+
+# Credentials and local environment files
+.env
+.env.*
+*.env
+
+# Claude Code local state
+.claude/
+
+# LaTeX byproducts in the paper source directory
+paper/*.aux
+paper/*.log
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.bbl
+paper/*.blg
+paper/*.out
+paper/*.toc
+paper/*.synctex.gz
+
+# Zenodo upload artifacts (the same PDF is tracked as paper/agency.pdf)
+paper/submission/artifacts/
+
+# Agent instructions, memories, skills, and plans
+.codex/
+.cursor/
+.grok/
+.aider*
+.gemini/
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+plan.md
+plans/
+memory/
+memories/
+skills/
+
+# Agent work logs and process checklists
+docs/mathematics-review.txt
+TechRxiv_QA_Report.md
+paper/checklist.md
+paper/consistency_checklist.md

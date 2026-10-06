@@ -1,149 +1,134 @@
-\section{The packaging engine: from kernels to induced agent variables}
+\section{Framework: from kernels to agent variables}
 \label{sec:engine}
 
-This section fixes the computational substrate used throughout the paper and defines the operational proxies for the \SBT\ primitives. The guiding principle is the thesis from Section~\ref{sec:introduction}: \emph{agenthood is an enablement/closure claim, while agency is a within-layer causal claim}. We therefore define (i) what it means for an induced agent layer to exist (packaging and viability under budgets), and (ii) what it means for interface choices to be difference-making once such a layer exists (feasible empowerment).
+This section fixes the mathematical setting and defines the three measures. The guiding distinction is the one from \cref{sec:introduction}: agenthood is about whether a maintained package exists (viability and packaging), while agency is about whether its feasible interface choices change outside futures (feasible empowerment).
 
-\subsection{Typing: theories (layers) and theory objects}
-A potential confusion is that in \SBT\ the word ``theory'' names the induced layer itself. We follow that usage. The finite data of this paper---a packaging lens, an induced controlled kernel, a feasibility gate, and a ledger/budget rule---constitute a theory (layer) $T$ at the chosen scale.
+\subsection{The finite setting}
+\SBT\ specifies a theory by a lens, a completion endomap, and an audit \citep{six_birds_theory}. For controlled systems we use a four-part specialisation of our own, $T=(\Pi,L,\mathcal{F},B)$, in which all components are finite and explicit: $\Pi$ is a set of projections of a finite state index, $L$ is a controlled stochastic kernel $P$, $\mathcal{F}$ is the ledger-gated set of feasible actions, and $B$ is the ledger dynamics, which is part of the state. More generally one may think of a microstate as split into inside, boundary, and outside parts, with a package being a coarse description such as (internal state, boundary observation, ledger, outside state). We do not need geometry or observation models here; every package is a projection of a finite state.
 
-\paragraph{Definition (Theory / layer, specialized).}
-In the notation of \SBT, a theory can be written $T=(\Pi,L,\mathcal F,B)$. In our finite setting, $\Pi$ is implemented by state projections, $L$ is the controlled kernel $P$, $\mathcal F$ is the ledger-gated feasible action set $A_{\mathrm{feas}}(s)$, and $B$ is the budget/ledger dynamics encoded in the state.
-
-\paragraph{Definition (Theory object).}
-A theory object is an object \emph{inside} a theory: a packaged macro label (or invariant package) that is stable under the closures induced by $T$ at the relevant horizon. Operationally, low idempotence defect means the macro labels behave like objects under composition; nonempty viability kernel means such objects can persist under robust support semantics. An \emph{agent} is a theory object equipped with an interface alphabet whose feasible interventions induce a nontrivial action channel to outside outputs (positive feasible empowerment).
-
-\subsection{Microstate factoring and packaging}
-We begin with a generic viewpoint that matches \SBT: a substrate microstate $x$ can be factored into \emph{inside}, \emph{boundary}, and \emph{outside} components,
+\paragraph{Controlled kernels.}
+Let $S$ be a finite state space and $A$ a finite action set. A controlled kernel assigns to each action $a$ and state $s$ a probability distribution over next states:
 \[
-x \equiv (i,b,e),
+P[a,s,s'] = \Pr(s_{t+1}=s' \mid s_t=s,\ a_t=a), \qquad P[a,s,s']\ge 0,\quad \textstyle\sum_{s'}P[a,s,s']=1.
 \]
-where ``boundary'' means the coupling degrees of freedom through which inside and outside exchange information and resources. A \emph{package} is an induced description (a coarse lens) $\Pi$ that produces a persistent macro-variable set. In later \SBT\ layers this could look like
+The \emph{support} of a move is the set of successors it can reach with positive probability,
 \[
-\Pi(i,b,e) \approx (s,o,r,y),
+\Post(s,a) = \{\, s' \in S : P[a,s,s']>0 \,\}.
 \]
-where $s$ is an internal macrostate, $o$ is an observation at the boundary, $r$ is a ledger/resource variable, and $y$ is an outside macrostate. In this paper we do not assume geometry or rich observation models; instead we work in an exact finite-state setting where the package is implemented as projections of a finite state index.
+Every support in our experiments is non-empty, as it must be for a stochastic kernel. Viability statements below are about supports, not averages: a move is safe only if \emph{every} possible successor is safe.
 
-\subsection{Finite controlled kernels}
-\paragraph{Definition (Finite controlled kernel).}
-Let $S=\{0,1,\dots,n-1\}$ be a finite state space and $A=\{0,1,\dots,m-1\}$ a finite action set. A controlled stochastic kernel is a row-stochastic tensor
+\paragraph{Ledger-gated feasibility.}
+A ledger is a non-negative quantity read from the state, $r:S\to\mathbb{R}_{\ge 0}$, and each action has a non-negative cost $c(a)$. The actions that can be paid for at $s$ are
 \[
-P[a,s,s'] \equiv \Pr(s_{t+1}=s' \mid s_t=s, a_t=a),
+\Afeas(s) = \{\, a\in A : c(a)\le r(s) \,\}.
 \]
-with $P[a,s,s']\ge 0$ and $\sum_{s'}P[a,s,s']=1$ for all $(a,s)$. For a state distribution $d$ (row vector), one step under action $a$ is $d' = d\,P[a,\cdot,\cdot]$.
+This is how constraints (P$_2$) and accounting (P$_6$) enter: a command the ledger cannot pay for is not an action of the induced level.
 
-\paragraph{Definition (Successor support).}
-We use robust support semantics: the set of possible successors under $(s,a)$ is
+\subsection{Viability: can the package be kept safe?}
+\paragraph{Definition.}
+A safety predicate $\Safe\subseteq S$ says which states are acceptable; besides survival it can encode coherence, for example ``no damage''. For a candidate set $K\subseteq S$, define
 \[
-\mathrm{Post}(s,a) \;:=\; \{\, s' \in S \;:\; P[a,s,s']>0 \,\}.
+\mathcal{V}(K) = \bigl\{\, s\in K : s\in\Safe \ \text{and}\ \exists\, a\in \Afeas(s)\ \text{with}\ \Post(s,a)\subseteq K \,\bigr\}.
 \]
-All viability statements below are with respect to $\mathrm{Post}$ (not expectations): a move is safe only if \emph{every} nonzero-probability successor stays safe.
+A state survives one application of $\mathcal{V}$ if it is safe and some affordable action keeps all of its possible successors in $K$. The operator is \emph{monotone} ($K\subseteq K'$ implies $\mathcal{V}(K)\subseteq\mathcal{V}(K')$) and \emph{contracting} ($\mathcal{V}(K)\subseteq K$). Its fixed points are exactly the safe \emph{controlled-invariant} sets: sets $K\subseteq\Safe$ in which every state has an affordable action whose support stays in $K$.
 
-\subsection{Ledger-gated feasibility (constraints + accounting)}
-\paragraph{Definition (Ledger and feasibility).}
-A ledger is a nonnegative scalar extracted from state, $r:S\to \mathbb{R}_{\ge 0}$. Each action has a nonnegative cost $c:A\to \mathbb{R}_{\ge 0}$. The feasible actions at state $s$ are
+The \emph{viability kernel} $\K$ \citep{aubin1991} is the greatest such set. We compute it by iterating $\mathcal{V}$ from $K_0=\Safe$ until nothing changes. Because each iteration either removes at least one state or stops, the iteration reaches a fixed point after at most $|\Safe|$ strict removals, that is, after at most $|\Safe|+1$ evaluations of $\mathcal{V}$. The fixed point it reaches contains every safe controlled-invariant set, so it is $\K$. This finite version of the Knaster--Tarski argument \citep{tarski1955} is proved in Lean for the operator above, with monotonicity and contraction derived rather than assumed (\cref{app:lean_viability}).
+
+\paragraph{What $\K$ certifies.}
+Controlled invariance supplies a stationary feedback rule on $\K$: choose for each state in $\K$ an affordable action whose support stays in $\K$. Every trajectory that follows such a rule from a state in $\K$ stays in $\K$, and hence stays safe, along every possible path; this is also proved in Lean. If $\K=\emptyset$, no rule can keep the system safe with certainty. We use $|\K|$ as the measure of maintained existence.
+
+\subsection{Feasible empowerment: do choices change the outside?}
+\paragraph{Action-sequence channels.}
+An \emph{output lens} is a projection $f:S\to Y$ onto a finite set of outside values; in the ring world it is the position $y$. Fix a start state $s_0$ and a horizon $H\ge 1$. Each action sequence $\alpha=(a_0,\dots,a_{H-1})$ induces a distribution over $Y=f(S_H)$, the outside value after $H$ steps. Collecting these distributions as rows gives a channel
 \[
-A_{\mathrm{feas}}(s) \;:=\; \{\, a\in A \;:\; c(a)\le r(s)\,\}.
+W[\alpha,y] = \Pr\bigl(f(S_H)=y \mid s_0,\ \alpha\bigr).
 \]
-This is the operational form of P$_2$ (constraints) and P$_6$ (accounting): infeasible interface commands are not ``actions'' in the induced layer.
 
-\subsection{Viability kernel as a greatest fixed point (P$_5$ backbone)}
-\paragraph{Definition (Safe set).}
-A safety predicate $\mathrm{Safe}:S\to\{\text{true},\text{false}\}$ specifies which states count as viable. We emphasize that ``safe'' can encode more than survival; in later sections we also use safety to encode coherence (e.g., requiring a repaired/noise-free internal bit).
-
-\paragraph{Definition (Viability operator / controlled-invariance map).}
-Given a candidate set $K\subseteq S$, define the contracting controlled-invariance operator
+\paragraph{Empowerment.}
+Empowerment \citep{klyubin2005} is the capacity of this channel \citep{shannon1948},
 \[
-\mathcal{V}(K) \;:=\; \Bigl\{\, s\in K \;:\; \mathrm{Safe}(s)\ \wedge\ \exists a\in A_{\mathrm{feas}}(s)\ \text{s.t.}\ \mathrm{Post}(s,a)\subseteq K \Bigr\}.
+\Emp(s_0;H,f) = \max_{p} I(\Alpha;Y),
 \]
-Intuitively: $s$ remains in $K$ if it is safe and there exists a feasible action whose entire successor support stays inside $K$. The explicit condition $s\in K$ makes $\mathcal{V}$ pointwise contracting ($\mathcal{V}(K)\subseteq K$), matching the standard ``greatest controlled-invariant subset'' construction and the assumptions of our Lean fixed-point anchor.
+where $\Alpha$ is the chosen sequence, drawn from the input distribution $p$, and $I$ is mutual information. Capacity is zero exactly when all rows of $W$ are identical, that is, when no choice of actions changes the outside distribution.
 
-\paragraph{Definition (Viability kernel).}
-The viability kernel $\K\subseteq S$ is the greatest fixed point of $\mathcal{V}$ \citep{aubin1991,tarski1955},
+\paragraph{Feasible empowerment and its scope.}
+To respect costs we restrict the input alphabet to sequences the \emph{initial} ledger can pay for in total, $\sum_{t<H} c(a_t)\le r(s_0)$, and define $\Emp_{\mathrm{feas}}(s_0;H,f)$ as the capacity of $W$ restricted to those rows. If no sequence is affordable we report zero by convention. Three features of this definition matter for interpretation:
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+  \item The inputs are \emph{open-loop} sequences, chosen in advance; the viability kernel, by contrast, is defined by state feedback.
+  \item The budget rule looks only at the initial ledger. When income or maintenance changes the ledger along the way, it is not the same as checking affordability step by step on every branch.
+  \item The affordable sequences are \emph{not} required to keep the system in $\K$ or even safe. A positive empowerment from a viable state therefore does not show that safety-preserving policies have positive capacity. In \cref{sec:ex_sweep}, for example, only REPAIR keeps the system coherent when damage noise is positive, so the channel restricted to safe moves would have zero capacity there.
+\end{itemize}
+We therefore read feasible empowerment as a budgeted measure of open-loop difference-making, and we use the null tests of \cref{sec:ex_nulls} to check that it is not produced by mis-typed variables.
+
+\paragraph{Computing the capacity.}
+We use the Blahut--Arimoto iteration \citep{blahut1972,arimoto1972}. Starting from the uniform input law, with $q_k = p_k W$ the induced output law and $D_k(\alpha)=D\bigl(W_\alpha \,\|\, q_k\bigr)$ the relative entropy of row $\alpha$ from it, the update is
 \[
-\K \;=\; \mathcal{V}(\K),
+p_{k+1}(\alpha) \;\propto\; p_k(\alpha)\, \exp D_k(\alpha).
 \]
-computed by iterating $\mathcal{V}$ from the top safe set until convergence. In finite state spaces, this monotone decreasing iteration stabilizes in at most $|S|$ steps; our Lean lemma in the reproducibility section provides a formal anchor for this finite greatest-fixed-point property.
-
-\paragraph{Remark (feedback versus open-loop).}
-The viability kernel is a feedback notion: it certifies that for each state in $\K$ there exists an admissible action keeping successor support inside $\K$, and this choice can depend on the current state. Our empowerment calculations, by contrast, treat open-loop action sequences as channel inputs. We use these as complementary proxies: $\K$ certifies maintained existence under robust feasibility, while empowerment measures within-layer difference-making of the interface channel once such a viable domain exists.
-
-Operationally, $|\K|$ serves as a quantitative proxy for ``agenthood as maintained existence'': if $\K=\emptyset$, no policy can keep the package viable under the ledger-gated constraints.
-
-\subsection{From action sequences to channels}
-\paragraph{Definition (Output lens).}
-An output variable is a projection (lens) $f:S\to Y$ into a finite output set $Y=\{0,1,\dots,|Y|-1\}$. In the ring-world exhibits, $f$ is typically the outside position coordinate $y$ or a macro-lens $(y,r,\phi)$ that intentionally hides micro-variables.
-
-\paragraph{Definition (Action-sequence channel).}
-Fix an initial state $s_0$ and a horizon $H\ge 1$. For an action sequence $\alpha=(a_0,\dots,a_{H-1})$, let $S_H$ be the random state after rolling out the kernel under $\alpha$, and define $Y=f(S_H)$. The induced channel from sequences to outputs is
+At every step, the mutual information of the current input law is a lower bound on the capacity, and $\max_\alpha D_k(\alpha)$ is an upper bound: for any input law $p'$,
 \[
-W[\alpha, y] \;:=\; \Pr(Y=y \mid s_0,\alpha).
+I(p';W) = \sum_\alpha p'(\alpha)\, D\bigl(W_\alpha\,\|\,q_k\bigr) - D\bigl(p'W\,\|\,q_k\bigr) \;\le\; \max_\alpha D_k(\alpha).
 \]
-Equivalently, each row of $W$ is the output distribution obtained by propagating $\delta_{s_0}$ through the sequence and aggregating probability mass by $f$.
-
-\subsection{Feasible empowerment as difference-making}
-\paragraph{Definition (Empowerment).}
-For a fixed $(s_0,H,f)$, empowerment is the channel capacity of $W$ \citep{klyubin2005,shannon1948}:
-\[
-\Emp(s_0;H,f) \;:=\; \max_{p(\alpha)} I(\Alpha;Y),
-\]
-where $\Alpha$ is the chosen action-sequence random variable and $I(\cdot;\cdot)$ is mutual information \citep{shannon1948}. We compute this exactly (for small channels) via Blahut--Arimoto \citep{blahut1972,arimoto1972}.
-
-\paragraph{Definition (Feasible empowerment).}
-To respect P$_2$/P$_6$, we restrict the sequence set by ledger feasibility. Given costs $c(a)$ and budget $r(s_0)$, a sequence $\alpha$ is feasible if $\sum_{t=0}^{H-1} c(a_t) \le r(s_0)$. Feasible empowerment is the capacity of the restricted channel:
-\[
-\Emp_{\mathrm{feas}}(s_0;H,f) \;:=\; \mathrm{Cap}\bigl(W\ \text{restricted to feasible }\alpha\bigr).
-\]
-\paragraph{Remark (what ``feasible'' means in this paper).}
-In principle, feasibility can be state- and branch-dependent because the ledger is part of the state and may evolve over the horizon. In this paper we use a deliberately simple, explicit notion: we treat the channel input alphabet as \emph{open-loop} action sequences and restrict it by an \emph{initial-budget} gate, i.e.\ $\sum_{t=0}^{H-1} c(a_t)\le r(s_0)$. This yields an ``open-loop budgeted empowerment'' that is easy to audit and compare under matched controls. It can over- or under-approximate stricter stepwise feasibility in settings with replenishment or branch-dependent constraints; we therefore treat it as an operational proxy and include calibrated nulls (Section~\ref{sec:ex_nulls}) to guard against mis-typed control channels.
+We stop when the upper and lower bounds differ by at most $10^{-12}$~nats ($10^{-6}$~nats in the sweep of \cref{sec:ex_sweep}) and report the lower bound, which is the mutual information of the returned input law. If the gap does not close within the iteration limit the computation fails rather than returning an unconverged value. Identical rows are merged before iterating, since repeated sequences with the same effect add no distinguishable outputs. All of this is done in floating-point arithmetic; the bounds are numerical, not interval-certified.
 
 \paragraph{Aggregation.}
-When we report ``median empowerment on $\K$,'' we compute $\Emp_{\mathrm{feas}}(s;H,f)$ per state $s\in\K$ and take the median; if $\K$ is large, we use a fixed deterministic subset rule recorded in the artifact manifest to keep computation bounded while remaining reproducible.
-When $\Emp_{\mathrm{feas}}\approx 0$ (and null regimes confirm it is not an artifact), the induced layer has no nontrivial action channel: it cannot ``throw a stone'' in the counterfactual sense.
+Empowerment is computed per start state. When we report the median over $\K$, we state how the states were chosen: all of them, a seeded random sample, or the first states in index order. Medians over different samples are not directly comparable.
 
-\subsection{Packaging endomap and idempotence defect (objecthood proxy)}
-Packaging is not only about survival; it is about whether a coarse lens induces stable object-like labels when micro-degrees of freedom churn underneath.
+\subsection{Packaging: do coarse labels behave like objects?}
+\paragraph{The packaging map.}
+Let $\pi:S\to X$ be a macro lens that hides some variables, with $X=\pi(S)$ its set of realised labels, and let $S_x=\{s:\pi(s)=x\}$ be the (non-empty) fibre of label $x$. Fix a stationary policy $\mu(a\mid s)$ and its one-step transition matrix $T_\mu[s,s']=\sum_a \mu(a\mid s)P[a,s,s']$. For each label $x$, start from the uniform distribution on $S_x$, evolve it for $\tau$ steps under $T_\mu$, project to labels with $\pi$, and let $E(x)$ be the most probable label (ties go to the smallest label). This defines a map $E:X\to X$, which we call the packaging map.
 
-\paragraph{Definition (Macro lens and fibers).}
-Let $\pi:S\to X$ be a macro lens (coarser than $f$ in general). For a macro label $x\in X$, define its fiber $S_x := \{s\in S : \pi(s)=x\}$.
-
-\paragraph{Definition (Empirical packaging endomap).}
-Fix a horizon $\tau\ge 0$ and a stationary policy $\mu(a\mid s)$ (deterministic or stochastic). For each macro label $x$, initialize a reference micro-distribution $d_0$ that is uniform over $S_x$. Let $T_\mu$ be the induced one-step transition under $\mu$:
+\paragraph{Idempotence defect.}
 \[
-T_\mu[s,s'] := \sum_{a\in A} \mu(a\mid s)\,P[a,s,s'].
+\Def(E) = \frac{\bigl|\{x\in X : E(E(x))\neq E(x)\}\bigr|}{|X|}.
 \]
-Evolve $d_\tau := d_0\,T_\mu^\tau$, aggregate to a macro distribution over $X$ via $\pi$, and define $E(x)$ as the mode macro label at time $\tau$ (ties broken deterministically by smallest label). The resulting map
-\[
-E: X\to X
-\]
-is an empirical \emph{packaging endomap}: it says ``starting from macro label $x$ (with hidden microstate randomized), what macro label do we typically return to after $\tau$ steps under the policy?''
+A defect of zero means that every label in the image of $E$ is a fixed point: starting from a typical microstate behind such a label, the most likely label after $\tau$ steps is the label itself.
 
-\paragraph{Definition (Idempotence defect).}
-The idempotence defect of $E$ is
-\[
-\mathrm{Def}(E) \;:=\; \frac{|\{x\in X: E(E(x))\neq E(x)\}|}{|X|}.
-\]
-If $\mathrm{Def}(E)\approx 0$, the macro labels behave like stable objects under the lens $\pi$ and the policy $\mu$; if $\mathrm{Def}(E)$ is large, the lens fails to induce objecthood (labels do not compose stably).
+\paragraph{What zero defect does and does not mean.}
+The map $E$ restarts from a fresh uniform fibre each time it is applied, so $E(E(x))$ is generally not the most likely label after $2\tau$ steps of one continuous run. In particular, $E\circ E=E$ does not imply that the coarse labels form a Markov chain of their own, nor that a label's fibre is invariant. A two-state example makes this concrete: with transition matrix $\left(\begin{smallmatrix}0.6&0.4\\0.4&0.6\end{smallmatrix}\right)$, the identity lens, and $\tau=1$, every label is its own most likely successor, so $\Def(E)=0$, yet each label moves to the other with probability $0.4$ at every step. The defect is therefore a \emph{modal} notion of objecthood: it measures whether coarse labels are self-reinforcing under a given policy, not whether they persist with certainty. That stronger property is what viability measures, and the two can disagree (\cref{sec:ex_packaging}).
 
-\subsection{Relativity to lenses, horizons, and maintenance policies}
-All operational notions in this paper are relative to a chosen induced layer (a theory in \SBT\ terms) and to explicit observational/temporal choices: (i) what counts as ``outside'' (output lens $f$), (ii) what macro labels are treated as objects (macro lens $\pi$), (iii) horizons $H$ (for difference-making) and $\tau$ (for packaging stability), and (iv) a maintenance policy $\mu$ used to define the packaging endomap $E$. This is not an arbitrary observer effect layered on top of the model: in \SBT\ the lenses and horizons are part of specifying the layer itself, and our claims are comparative under matched choices of $(f,\pi,H,\tau,\mu)$.
+Both the lens and the policy are part of the specification. Many objects are maintained rather than passive, so a low defect is a statement about objecthood under a particular maintenance policy, not under all policies.
 
-\paragraph{Remark (policy dependence is intended).}
-The endomap $E$ is conditioned on a policy $\mu$ because many objects are maintained rather than passive. We therefore interpret low idempotence defect as a statement about objecthood \emph{under a maintenance regime}, not as a claim that the macro labels are self-stabilizing under all policies.
+\subsection{An agent at a given scale}
+Fix a theory (kernel, feasibility rule, ledger), lenses $f$ and $\pi$, horizons $H$ and $\tau$, a safety predicate, and a maintenance policy $\mu$. We call the induced package an \emph{agent at this scale} if
+\begin{enumerate}[label=(\roman*), leftmargin=*, itemsep=0.2em]
+  \item the viability kernel $\K$ is non-empty (maintained existence),
+  \item the packaging map has zero defect under $\pi$, $\mu$, and $\tau$ (object-like labels), and
+  \item feasible empowerment to $f$ at horizon $H$ is positive from at least one state of $\K$ (difference-making).
+\end{enumerate}
+The experiments report the size of $\K$, the defect, and the median of feasible empowerment over a stated set of start states in $\K$; a positive median implies condition (iii). This is an operational definition, relative to every choice listed. It is not a claim that these conditions are necessary for agency in general.
 
-\paragraph{Definition (Agent as a theory object, operational).}
-Fix a theory layer $T$ (kernel + feasibility + ledger), lenses $(f,\pi)$, horizons $(H,\tau)$, and a maintenance policy $\mu$ for $E$. We call the induced package an \emph{agent theory object at this scale} if (i) the viability kernel $\K$ is nonempty for the chosen safety predicate (maintained existence), (ii) the macro labels behave object-like under $\pi$ and $\mu$ at horizon $\tau$ (low idempotence defect), and (iii) the within-layer action channel to $f$ at horizon $H$ is nontrivial (positive feasible empowerment on $\K$). The exhibits report these as $|\K|$, median empowerment on $\K$, and $\mathrm{Def}(E)$.
+\subsection{The ring world}
+\label{sec:ringworld}
+Apart from the two small null systems of \cref{sec:ex_nulls}, all experiments use a single family of finite systems (\cref{fig:overview}). A state is a tuple $(y,u,\phi,r,g,\theta)$: position $y$ on a ring of $L=8$ sites, a damage bit $u$, a phase $\phi\in\{0,\dots,m_\phi-1\}$, a ledger $r\in\{0,\dots,R_{\max}\}$, an identity sector $g$ (a single value in every experiment reported here), and a skill level $\theta\in\{0,\dots,\theta_{\max}\}$. The actions are LEFT and RIGHT, plus REPAIR and LEARN when enabled. One step from $(y,u,\phi,r,g,\theta)$ under action $a$ proceeds as follows.
+\begin{enumerate}[leftmargin=*, itemsep=0.2em]
+  \item \emph{Feasibility.} The action is executed only if $c(a)\le r$; otherwise nothing is moved, repaired, learned, or charged.
+  \item \emph{Movement.} An executed LEFT or RIGHT displaces the agent by $+d$ or $-d$ sites, where $d=1$ without protocol and, with protocol, $d=1$ for even $\phi$ and $d=2$ for odd $\phi$. If $u=1$, the direction is reversed. With probability equal to the slip $\max(0,\,p_{\mathrm{slip}}-\theta\,\delta_\theta)$ the agent stays put instead.
+  \item \emph{Damage.} The bit $u$ flips with probability $p_{\mathrm{flip}}$.
+  \item \emph{Repair and learning.} An executed REPAIR sets $u=0$ with probability $p_{\mathrm{repair}}$. An executed LEARN increases $\theta$ by one, up to $\theta_{\max}$.
+  \item \emph{Phase and ledger.} The phase advances, $\phi\leftarrow\phi+1 \bmod m_\phi$. The ledger gains the income if the new position is an income site, pays the cost of an executed action, and is clipped to $[0,R_{\max}]$.
+\end{enumerate}
+\Cref{tab:configs} lists the parameters of each experiment.
 
-\subsection{Claims versus evidence (mini-map)}
-\begin{center}
-\fbox{\begin{minipage}{0.94\linewidth}
+\begin{table}[t]
+\centering
 \small
-\textbf{Claims vs evidence.} Each primitive contributes a distinct agency role; we test them with complementary artifacts.
-\begin{itemize}[leftmargin=*, itemsep=0.2em]
-  \item \textbf{Packaging requires maintenance (P$_5$+P$_6$).} Repair collapses idempotence defect under a lens that hides microstate (Exhibit~\ref{sec:ex_packaging}); the noise--maintenance sweep shows where viability and empowerment collapse when repair becomes unaffordable (Exhibit~\ref{sec:ex_sweep}).
-  \item \textbf{Difference-making is not automatic.} Single-action systems have zero empowerment, and exogenous schedules can fake empowerment if mis-modeled (Exhibit~\ref{sec:ex_nulls}).
-  \item \textbf{Protocol holonomy creates horizon-dependent control (P$_3$).} Empowerment separates protocol ON vs OFF only at $H\ge 2$ (Exhibit~\ref{sec:ex_holonomy}).
-  \item \textbf{Operator rewriting thickens causal control (P$_1$).} Increasing skill $\theta$ monotonically increases empowerment by reducing effective noise (Exhibit~\ref{sec:ex_learning}).
-  \item \textbf{Ablations connect the pieces (P$_1$--P$_6$).} A small toggle suite summarizes how the metrics change when primitives are weakened (Exhibit~\ref{sec:ex_ablations}).
-\end{itemize}
-\end{minipage}}
-\end{center}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.2\linewidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+ & \textbf{Packaging} (\S\ref{sec:ex_packaging}) & \textbf{Reference model} (\S\ref{sec:ex_holonomy}, \S\ref{sec:ex_ablations}) & \textbf{Sweep} (\S\ref{sec:ex_sweep}) & \textbf{Skill} (\S\ref{sec:ex_learning}) \\
+\midrule
+States & 64 & 96 & 128 & 144 \\
+Phases $m_\phi$, protocol & 2, on & 2, on/off & 1, off & 1, off \\
+Ledger range & 0--1 & 0--2 & 0--7 & 0--2 \\
+Income & 1 per step, every site & none & 4 at site 0 & none \\
+Costs (move, repair) & 0, 1 & 1, 0 & 1, swept 0--7 & 0, -- \\
+$p_{\mathrm{flip}}$, $p_{\mathrm{slip}}$ & 0.1, 0.2 & 0.1, 0.2 & swept 0--0.7, 0 & 0, 0.4 \\
+Extra actions & REPAIR (on) & REPAIR & REPAIR & LEARN \\
+Safety & $r\ge1,\ u=0$ & $r\ge 1$ & $r\ge1,\ u=0$ & $r\ge 1$ \\
+Horizon & $\tau=1,\dots,10$ & $H=1,\dots,5$; $\tau=2$ & $H=2$ & $H=2$ \\
+Empowerment start states & none (no empowerment computed) & up to 32 sampled from $\K$ & up to 16, first in index order & all of $\K$ with $u=0$ \\
+\bottomrule
+\end{tabularx}
+\caption{Ring-world configurations. All use $L=8$ sites, a single identity sector, and the outside position $y$ as output lens. ``Safety'' is the predicate used for the viability kernel. In the packaging experiment the packaging map uses all 32 macro fibres. The last row gives the start states over which median empowerment is taken; samples use seed $0$, and an empty kernel gives a reported median of $0$. The reference model is used with the protocol on and off in \cref{sec:ex_holonomy}; the ablations in \cref{sec:ex_ablations} make the following changes: protocol off; REPAIR removed; repair success $0.5$; $p_{\mathrm{flip}}=p_{\mathrm{slip}}=0.4$; movement cost $0$; movement cost $0$ together with REPAIR removed (a combined change); or a LEARN action with $\theta\in\{0,1\}$ and $\delta_\theta=0.2$ (so slip is $0$ at $\theta=1$), which doubles the state space to 192. Repair succeeds with probability $1$ except in the imperfect-repair ablation ($0.5$) and the failed-repair control of \cref{sec:ex_packaging} ($0$). In the skill experiment the channel inputs are LEFT and RIGHT only, and $\delta_\theta=0.15$.}
+\label{tab:configs}
+\end{table}

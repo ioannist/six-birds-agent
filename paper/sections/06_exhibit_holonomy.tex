@@ -1,47 +1,47 @@
-\section{Exhibit: protocol holonomy creates horizon-dependent control}
+\section{Protocol cycles: when order matters}
 \label{sec:ex_holonomy}
 
-This exhibit isolates P$_3$ (protocol cycle / holonomy): \emph{order matters}. In the engine (Section~\ref{sec:engine}) we defined (feasible) empowerment as the capacity of the induced channel from action sequences to outside futures. P$_3$ predicts a distinctive signature: if the environment admits noncommuting interface moves, then one-step control can look identical across regimes, while multi-step horizons reveal additional controllability created purely by \emph{sequence structure}.
+This experiment isolates P$_3$, the protocol cycle. If the effect of an interface move depends on \emph{when} it is made, then sequences of moves can reach outcomes that single moves cannot distinguish. The signature to look for is control that is equal at one step and larger over several steps.
 
-\subsection{Setup: identical kernels except for protocol}
-We compare two ring-world regimes that are identical in noise, budgets, and costs; the only difference is whether protocol holonomy is enabled.
-\begin{itemize}[leftmargin=*, itemsep=0.25em]
-  \item \textbf{Protocol ON (P$_3$ enabled):} the displacement induced by LEFT/RIGHT depends on a staged phase variable $\phi$, so that action composition over time is noncommutative (the effective move depends on when it is applied).
-  \item \textbf{Protocol OFF:} LEFT/RIGHT are phase-independent; sequence order produces no additional geometric drift beyond the obvious one-step effects.
-\end{itemize}
-In both regimes we measure \emph{median feasible empowerment on the viability kernel} $\K$ using output lens $f(s)=y$ (outside ring position) and horizons $H\in\{1,2,3,4,5\}$. Feasibility is enforced by the ledger: an action sequence is admissible only if its total cost fits within the initial budget (Section~\ref{sec:engine}).
+\subsection{Setup}
+We compare the reference ring world of \cref{tab:configs} with and without the protocol; the two configurations are otherwise identical. With the protocol on, LEFT and RIGHT move the agent one site at even phase and two sites at odd phase, so the effect of a move depends on the phase at which it is made. With the protocol off, every move is one site. In both regimes movement costs one unit, REPAIR is free, there is no income, the ledger holds at most two units, damage flips with probability $0.1$, and moves slip with probability $0.2$.
 
-\subsection{Result: equality at $H=1$, divergence for $H\ge 2$}
-Figure~\ref{fig:protocol_horizon} shows the median feasible empowerment (bits) as a function of horizon $H$.
+Safety is $r\ge1$. In both regimes the viability kernel contains all 64 states with $r\ge 1$, since the free REPAIR action leaves position and ledger unchanged. For each horizon $H=1,\dots,5$ we compute feasible empowerment to the position $y$, with all three actions as channel inputs and the initial-budget rule of \cref{sec:engine}, for the same 32 start states sampled from $\K$ (seed $0$), and report the median.
 
-\emph{At $H=1$, the curves coincide.} This is expected: a single step cannot exploit protocol holonomy because there is no order-of-composition effect in a one-element sequence. Formally, the channel inputs are single actions, so any holonomy that arises from noncommuting compositions is invisible.
-
-\emph{For $H\ge 2$, the curves separate.} Once sequences have length at least two, noncommutativity can create distinct reachable output distributions that do not exist in the protocol-OFF regime. This is the operational content of P$_3$: agency can arise from the geometry of action composition even when the one-step menu of actions looks the same.
-
-For reference, the measured empowerment values (median over viable states) are:
-
-\[
-\Emp_{\mathrm{feas}}^{\text{protocol ON}}(H=1..5)
-=
-[1.0493,\ 1.6613,\ 1.6328,\ 1.6894,\ 1.6627],
-\]
-\[
-\Emp_{\mathrm{feas}}^{\text{protocol OFF}}(H=1..5)
-=
-[1.0493,\ 1.1218,\ 1.1034,\ 1.0856,\ 1.0719].
-\]
+\subsection{Result: equal at one step, separated from two steps on}
+\Cref{fig:protocol_horizon} shows the medians (in bits):
+\begin{center}
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+$H$ & 1 & 2 & 3 & 4 & 5 \\
+\midrule
+Protocol on  & 1.050 & 1.725 & 1.742 & 1.846 & 1.846 \\
+Protocol off & 1.050 & 1.210 & 1.288 & 1.288 & 1.288 \\
+\bottomrule
+\end{tabular}
+\end{center}
+At $H=1$ the two regimes coincide. Here the reason can be checked directly: from any start state, the one-step channels of the two regimes differ only in whether the moved-to positions are one or two sites away, so they are the same channel up to a relabelling of outputs and have the same capacity. This is a property of these particular channels, not a general theorem about protocols. From $H=2$ on, the protocol regime has higher median empowerment, and the gap is largest (about $0.56$~bits) at $H=4$ and $5$. Neither curve can decrease with the horizon, because appending the free REPAIR action to every sequence leaves both the cost and the final position unchanged. Longer sequences can produce more distinguishable distributions of the final position, sometimes by reaching additional positions; the protocol curve gains more.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.88\linewidth]{figures/fig_protocol_horizon.png}
-  \caption{Protocol holonomy yields horizon-dependent control. Median feasible empowerment (bits) on the viability kernel $\K$ as a function of horizon $H$ for protocol ON vs OFF, using output lens $f(s)=y$ (outside position). The curves coincide at $H=1$ but diverge for $H\ge 2$, as predicted by P$_3$ noncommutativity: ordered action composition creates additional reachable outside futures that are not present in the phase-independent regime.}
+  \includegraphics[width=0.72\linewidth]{figures/fig_protocol_horizon.pdf}
+  \caption{Median feasible empowerment (bits) to the outside position $y$ as a function of horizon, with and without the phase-dependent step. Medians are over the same 32 start states sampled from the viability kernel. The curves coincide at $H=1$ and separate from $H=2$ on.}
   \label{fig:protocol_horizon}
 \end{figure}
 
-\subsection{A checkable noncommutativity witness}
-Beyond the aggregate curve, we exhibit a single start state $s^\star$ and two length-2 sequences $\alpha=(\mathrm{R},\mathrm{L})$ and $\beta=(\mathrm{L},\mathrm{R})$. In the protocol-ON kernel their induced output distributions over $y$ differ, while in the protocol-OFF kernel they coincide (up to numerical tolerance). We report this as a total variation distance:
-\input{generated/holonomy_witness.tex}
-This is the concrete sense in which order-of-composition creates additional distinguishable futures at $H\ge 2$ even when $H=1$ remains matched.
+\subsection{A direct test of order dependence}
+The medians aggregate many effects. For a sharper test we fix one start state, $s^\star=(y=0,\ u=0,\ \phi=1,\ r=2)$, and compare the two orders of the same moves, $\alpha=(\mathrm{RIGHT},\mathrm{LEFT})$ and $\beta=(\mathrm{LEFT},\mathrm{RIGHT})$. Both cost two units and are affordable from $r=2$. \Cref{tab:holonomy_witness} reports the total variation distance between the resulting distributions of $y$.
 
-\subsection{Interpretation in Six Birds terms}
-This is the simplest ``protocol makes an agent more than a thermostat'' result. P$_3$ is not memory (P$_5$) and not budget (P$_6$): it is purely geometric. It says that a controller can gain effective degrees of freedom from the \emph{order} of its interface moves, and that such gains only appear when the induced layer admits multi-step horizons. In the thesis language, protocol holonomy enriches the agent object's action channel within an otherwise fixed theory: it increases the expressivity of feasible interventions without changing the packaging lens, thickening what the interface can reliably cause.
+\begin{table}[t]
+\centering
+\small
+\input{generated/holonomy_witness.tex}
+\caption{Total variation distance between the outside-position distributions produced by RIGHT-then-LEFT and LEFT-then-RIGHT from $s^\star=(y=0,u=0,\phi=1,r=2)$. Exact values: $84/125$ and $12/125$ with damage noise, $16/25$ and $0$ without it. The slip probability is $0.2$ in all four cases.}
+\label{tab:holonomy_witness}
+\end{table}
+
+With the damage noise of the main experiment, order matters in both regimes ($0.672$ with the protocol, $0.096$ without). The second effect has nothing to do with the protocol: if damage occurs between the two moves, it reverses the direction of the second move, and the resulting displacement depends on which move came first. When damage noise is set to zero and everything else is kept, the protocol-free regime becomes exactly order-independent (distance $0$), while the protocol regime keeps a large order effect ($0.64$). This matched, noise-free pair isolates the protocol as the source of order dependence; the noisy pair shows that order effects in the full system also have other sources.
+
+\subsection{Interpretation}
+In \SBT\ terms, the protocol cycle is neither memory (P$_5$) nor budget (P$_6$): it concerns the order in which interface moves compose. In this substrate it leaves one-step control unchanged and enlarges multi-step control, without changing the viability kernel or the packaging lens. The agent's interface becomes more expressive over longer horizons; it can cause more distinguishable outcomes with the same moves and the same budget.

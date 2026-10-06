@@ -1,0 +1,41 @@
+% Overview diagram: the ring world (left) and the three measures (right).
+\begin{tikzpicture}[
+  font=\footnotesize,
+  site/.style={circle, draw=black!55, fill=white, minimum size=4.4mm, inner sep=0pt},
+  gain/.style={site, fill=black!15},
+  agent/.style={circle, fill=blue!70!black, minimum size=2.6mm, inner sep=0pt},
+  box/.style={draw=black!40, rounded corners=2pt, align=left, text width=5.4cm, inner sep=4pt},
+  tag/.style={font=\scriptsize\bfseries, text=black!60, anchor=west},
+  >={Stealth[length=1.8mm]}
+]
+% Ring world: sites numbered clockwise from the top; LEFT increases y.
+\def\R{1.3}
+\foreach \k in {0,...,7} {
+  \pgfmathsetmacro{\ang}{90-45*\k}
+  \ifnum\k=0
+    \node[gain] (s\k) at (\ang:\R) {};
+  \else
+    \node[site] (s\k) at (\ang:\R) {};
+  \fi
+  \node[font=\scriptsize, text=black!55] at (\ang:\R+0.4) {$\k$};
+}
+\foreach \k [evaluate=\k as \j using {int(mod(\k+1,8))}] in {0,...,7} {
+  \draw[black!30] (s\k) -- (s\j);
+}
+\node[agent] at (s2) {};
+\draw[->, blue!70!black, thick] (-10:1.75) arc[start angle=-10, end angle=-38, radius=1.75];
+\node[blue!70!black, font=\scriptsize, anchor=west] at (-26:1.8) {LEFT};
+\draw[->, blue!70!black, thick] (10:1.75) arc[start angle=10, end angle=38, radius=1.75];
+\node[blue!70!black, font=\scriptsize, anchor=west] at (26:1.8) {RIGHT};
+\node[align=center, font=\scriptsize] at (0,0) {position $y$\\ phase $\phi$\\ damage $u$\\ ledger $r$};
+\node[font=\scriptsize, text=black!55, align=center] at (0,-2.25) {shaded: income site};
+
+% Measures
+\begin{scope}[shift={(3.3,1.95)}]
+  \node[tag] (ag) at (0,0) {AGENTHOOD: does a stable package exist?};
+  \node[box, anchor=north west] (v) at (0,-0.25) {\textbf{Viability kernel} $\K$: largest safe set in which every state has an affordable action keeping all possible successors inside};
+  \node[box, anchor=north west] (p) at ($(v.south west)+(0,-0.15)$) {\textbf{Packaging defect} $\Def(E)$: are the labels that $E$ produces fixed when $E$ is applied again?};
+  \node[tag] (ac) at ($(p.south west)+(0,-0.3)$) {AGENCY: do its choices change the outside?};
+  \node[box, anchor=north west] (e) at ($(ac.south west)+(0,-0.12)$) {\textbf{Feasible empowerment}: capacity from affordable action sequences to the position $y$ at horizon $H$};
+\end{scope}
+\end{tikzpicture}

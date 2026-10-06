@@ -1,70 +1,51 @@
-\section{Discussion: an agent is a \emph{theory object}}
+\section{Discussion: an agent is a theory object}
 \label{sec:discussion}
 
-We can now restate the main claim in the most compressed form, with the typing made explicit.
+\paragraph{The thesis, restated.}
+In \SBT\ \citep{six_birds_theory}, a theory is an induced level of description; in this paper it is the finite specialisation $T=(\Pi,L,\mathcal{F},B)$. An agent is not that level. It is a \emph{theory object}: a maintained package inside the level, with a ledger-gated interface whose settings make a difference to outside futures within the induced dynamics. Agenthood is the existence and maintenance of the package; agency is the causal reach of its interface. Rather than adding agency as an extra ingredient, the framework asks which mechanisms must be in place for ``throwing a stone'', stable counterfactual difference-making under constraints, to become a meaningful statement at an induced scale.
 
-\paragraph{Thesis.}
-In \SBT\ (\citep{six_birds_theory}), a \emph{theory} is a \emph{layer/closure}: an induced macro-physics, often written $T=(\Pi,L,\mathcal F,B)$. An agent is \emph{not} this layer. An agent is a \emph{theory object}: an object \emph{inside} a theory---a maintained package with a ledger-gated interface whose internal degrees of freedom become bona fide causes of external futures \emph{within} the induced macro-physics. Agency is the within-layer causal content of that object; agenthood is the cross-layer enablement that makes such an object exist and persist.
+\subsection{Enablement and causation}
+The distinction between agenthood and agency is the distinction between enablement and causation.
 
-This framing matches the \SBT\ program: rather than positing agency as an extra ingredient, we ask which emergence primitives must be present for ``throwing a stone'' (stable counterfactual difference-making under constraints) to become a meaningful statement at an induced scale.
+Enablement is about making variables and objects exist stably. Packaging produces coarse labels and an interface; accounting produces a ledger that can be earned and spent; constraints turn commands into actions; staging fixes the horizons on which labels can stabilise. In our setting, the viability kernel is the sharpest measure of enablement: if $\K=\emptyset$, nothing can be maintained with certainty, and there is no stable package whose choices one could discuss.
 
-\subsection{Agenthood versus agency, revisited}
-Section~\ref{sec:introduction} separated two often-confused notions.
+Causation is about difference-making once the variables exist: within a fixed level, does changing the actions change the distribution of the outside variable $H$ steps later? Feasible empowerment measures this for open-loop, budgeted action sequences. The schedule trap shows why the two must be kept apart: importing an enablement mistake (treating outside structure as an action) into the causal level fabricates agency.
 
-\textbf{Agenthood} is an enablement claim: a theory/layer exists and persists long enough that an action variable can be identified at the boundary, a ledger can gate feasibility, and a safe set can be maintained robustly. In our finite setting, the viability kernel $\K$ operationalizes this persistence: if $\K=\emptyset$, the layer does not induce any maintained theory object on which policy choice can be meaningfully discussed as a stable capacity.
+The experiments separate the two axes in both directions. A phase-dependent step raises empowerment without changing the viability kernel (\cref{sec:ex_holonomy}). Funded repair creates a coherent viability kernel, while the packaging defect cannot distinguish it from an agent that merely stops moving (\cref{sec:ex_packaging}). And under damage noise, open-loop empowerment from viable states is positive even though only repair preserves coherence (\cref{sec:ex_sweep}).
 
-\textbf{Agency} is a causal claim inside the induced layer: interventions on the action variable change the distribution of future outside macrostates. In our setting, feasible empowerment is a clean proxy for this difference-making: it is the capacity of the induced channel from feasible action sequences to an outside output lens.
+\subsection{Relation to life}
+The companion paper on life \citep{six_birds_life} treats life as closure and maintenance: a package that persists by paying for its own repair. The present paper adds an ingredient that life as such does not require, namely an interface whose choices reach the outside in a stable way. Life leans on closure (P$_5$) and accounting (P$_6$); agency adds a genuine action channel, which protocol cycles (P$_3$) can widen and operator rewriting (P$_1$) can sharpen. This matches ordinary intuition: many living systems persist with little horizon-dependent control, and many controlled devices act without maintaining themselves.
 
-The exhibits intentionally split these axes. Repair can stabilize packaging (defect collapse) even when empowerment is limited; protocol holonomy can increase empowerment without changing the viability kernel size; and null regimes show that empowerment can be spuriously inflated if one misidentifies exogenous structure as choice.
+\subsection{Limitations}
+\paragraph{Small, exact systems.}
+The ring worlds in the reported experiments have at most 192 states. This makes every computation exact or numerically converged and fully auditable, but the results are finite existence witnesses under named configurations and policies. The definitions do not depend on scale; the evidence does.
 
-\subsection{Causation versus enablement}
-The \SBT\ distinction between causation and enablement is not merely terminological; it is the technical hinge of the paper.
+\paragraph{Open-loop, initial-budget empowerment.}
+Feasible empowerment uses action sequences fixed in advance and filtered by the initial ledger. It does not check affordability step by step when the ledger changes along the way, and it does not require the sequences to stay viable or safe. A positive value from a viable state is therefore not a capacity of safe behaviour. Closed-loop and safety-constrained versions are natural refinements.
 
-Enablement is about \emph{making variables and objects exist} in a stable way: packaging produces an induced macrostate and boundary interface; accounting produces a ledger that can be written and spent; constraints produce a feasibility gate that turns ``commands'' into ``actions''; staging produces horizons on which endomaps can stabilize. These are cross-layer statements: they describe how a theory/layer becomes available and how it induces stable theory objects.
+\paragraph{Modal objecthood.}
+The packaging defect is a property of a most-probable-label map that restarts from a uniform fibre. Zero defect does not imply that the coarse labels form an autonomous stochastic process, and it can arise from an agent that has simply stopped. We use it together with viability, not as a stand-alone measure of objecthood.
 
-Causation is about \emph{difference-making once the variables exist}. Inside a fixed induced layer, we can meaningfully ask whether changing $a_t$ changes the distribution of $y_{t+H}$. Feasible empowerment is one proxy for that causal leverage. The schedule trap demonstrates why the separation matters: if we import enablement mistakes into the causal layer (by treating an exogenous schedule as action), we fabricate agency.
+\paragraph{Lens and policy dependence.}
+Empowerment depends on the output lens, packaging on the macro lens and the maintenance policy, and viability on the safety predicate. In \SBT\ these choices are part of specifying the level of description. Our comparisons use stated lenses, safety predicates, and policies, and where a comparison changes the policy, as in the packaging controls, the change is explicit; every statement is relative to these choices.
 
-\subsection{Relation to the Life paper}
-The Life paper (\citep{six_birds_life}) treated life as a closure-and-maintenance phenomenon: what matters is not a biological checklist but the existence of a maintained package with accounting and persistence. The present paper extends that framing by adding a third ingredient that is not required for life as such: \emph{a nontrivial controllable interface whose counterfactual choices propagate to outside futures in a stable, compressible way}.
+\paragraph{Support semantics.}
+Viability asks that every possible successor be safe. This suits robust closure claims but is strict: as the sweep shows, any positive noise, however small, changes the result. Risk-sensitive or probabilistic variants would change the safe set and the operator but keep the fixed-point structure.
 
-In short: life emphasizes P$_5$ (closure) and P$_6$ (accounting/maintenance) as the backbone of persistence; agency adds the requirement that the induced package supports a genuine action channel (difference-making), often amplified by P$_3$ (protocol holonomy) and strengthened by P$_1$ (operator rewriting). This aligns with everyday intuitions: many living systems persist without rich horizon-dependent control, and many controlled systems can act but do not persist autonomously. The six-birds dictionary disentangles these cases without importing goal talk.
+\paragraph{Uneven coverage of the mechanisms.}
+Protocol cycles and paid maintenance are tested by matched comparisons. Operator rewriting is represented by fixed skill levels rather than a learning process. Identity is not exercised at all, and staging only through the phase. Sampled medians depend on the sampling rule, and capacities are floating-point approximations with numerical, not certified, error bounds.
 
-\subsection{Limitations and failure modes}
-\paragraph{Minimal substrate and finite-state scope.}
-Our environment is intentionally small and exact. This buys auditability and eliminates estimation ambiguity, but it is not a claim that agency in the wild reduces to small kernels. The correct interpretation is: the definitions are scale-agnostic, while the exhibits are minimal witnesses.
+\paragraph{What is assumed.}
+The interface (which variables are actions) is given, not discovered from microdynamics; discovering it is itself a packaging problem. The ledger is an abstract resource, not a thermodynamic quantity. We model a single agent, with no social interaction or norms.
 
-\paragraph{Lens dependence (what counts as outside).}
-Empowerment depends on the chosen output lens $f$ and packaging depends on the macro lens $\pi$. This is by design: it reflects the core \SBT\ idea that macroscopic variables are induced. But it implies that agency statements are always relative to a description. We mitigated this by using stable, explicitly defined lenses (outside position $y$; macro lens $(y,r,\phi)$) and by including null regimes that catch obvious mis-modeling.
-
-\paragraph{Empowerment is not a goal theory.}
-Channel capacity is a proxy for difference-making, not a statement about preferences, utility, or optimal behavior. An agent can have high empowerment and still be ``aimless''; conversely, a system can be highly goal-directed in a narrow channel with low empowerment. This paper deliberately avoids importing goals as primitives.
-
-\paragraph{Robust support semantics are conservative.}
-We defined viability using successor support inclusion (all nonzero-probability outcomes must remain safe). This is appropriate for robust closure claims, but it can be stricter than expected-value safety. Different application domains may prefer risk-sensitive variants; the formal structure (greatest fixed point of a monotone operator) remains, but the safe predicate and post operator change.
-
-\paragraph{Primitive coverage is uneven.}
-P$_3$ (protocol) and P$_6$ (maintenance) are strongly exhibited; P$_1$ (rewrite) is demonstrated in a stylized way; P$_4$ (quantized identity/staging) is present as a discrete sector and horizon alignment but not deeply ablated as a separate commitment/identity phenomenon. A fuller treatment of P$_4$ would require richer commitments and multi-agent interactions.
-
-\paragraph{Single-agent focus and absence of norms.}
-We did not model social agency, bargaining, institutionally enforced constraints, or normativity. In later \SBT\ layers, P$_2$ constraints can encode laws and norms, and P$_4$ can encode identity/commitment tokens; those deserve a dedicated treatment.
-
-\paragraph{Sampling and scale.}
-Some reported values (e.g., median empowerment on $\K$) depend on deterministic sampling when $\K$ is large. This is acceptable for a minimal witness but must be replaced by principled aggregation (or bounds) in large-scale settings.
-
-\paragraph{Interface is assumed, not discovered.}
-We treat the interface/action alphabet as part of the induced theory layer. Discovering boundaries and controllable interfaces from microdynamics is itself a packaging problem (a theory-construction problem) and is out of scope for this minimal witness.
-
-\paragraph{Ledger is an abstract resource.}
-The ledger variable $r$ is an accounting device used to model feasibility and maintenance costs. We do not claim thermodynamic optimality or a specific physical interpretation here; connecting $r$ to concrete energy/information inequalities is a separate layer construction.
-
-\paragraph{What we did not claim.}
-We did \emph{not} claim that agency requires consciousness, that empowerment is the only or final measure of agency, that our minimal ring-world captures the richness of real organisms, or that an ``agent'' must have goals or utilities. We claimed something narrower and more structural: once an induced theory layer exists and induces a maintained theory object under budgets, agency is the existence of a genuine, model-respecting action channel that makes stable counterfactual differences at the relevant horizon.
+\paragraph{What we do not claim.}
+We do not claim that agency requires consciousness, that empowerment is the measure of agency, that a ring world captures real organisms, or that agents must have goals or utilities. Nor do we claim that repair is necessary for objecthood, or that the Lean proofs cover the stochastic or information-theoretic parts of the pipeline. The claim is narrower: once an induced level maintains a package under budgets, agency can be read as the existence of a genuine, correctly typed action channel that makes stable counterfactual differences at the relevant horizon, and each part of that reading can be computed and checked.
 
 \subsection{Outlook}
-Three directions follow naturally. First, extend the substrate to multi-agent settings where P$_2$ constraints and P$_4$ tokens can encode commitments, ownership, and norms. Second, move from exact kernels to approximate learned models while preserving the audit posture (hashing, manifests, and invariants). Third, explore alternative causal proxies (risk-sensitive empowerment, reachability volumes, intervention-based causal effect sizes) and characterize when they agree or disagree.
+Three directions follow. First, multi-agent settings, in which constraints (P$_2$) and identity tokens (P$_4$) can express commitments, ownership, and norms. Second, learned approximate models in place of exact kernels, keeping the same audit discipline. Third, alternative causal measures, such as closed-loop or safety-constrained empowerment, reachable-set volumes, and interventional effect sizes, and a study of when they agree.
 
-\paragraph{Conclusion: the stone, the birds, and the theory.}
-To throw a stone is to have a controllable interface whose choices propagate to the outside in a stable way under constraints. The six birds explain how such a statement can become true: packaging and viability make an induced layer persist; accounting and constraints define what actions exist; protocol holonomy and operator rewriting enrich what those actions can do. In that sense, an agent is a \emph{theory object}---not the layer itself, and not an internal narrative, but a maintained object induced by a layer that turns certain internal degrees of freedom into causes in the induced macro-physics.
+\paragraph{Conclusion.}
+To throw a stone is to have an interface whose choices reach the outside in a stable way under constraints. The six birds explain how that statement can become true: closure and accounting let a package persist, constraints decide which actions exist, and protocol cycles and operator rewriting extend what those actions can do. In this sense an agent is a theory object: not the level of description itself and not an inner narrative, but a maintained object of that level whose interface variables become causes in the induced dynamics.
 
 \section*{Declarations}
 
@@ -81,13 +62,13 @@ No external funding was received for this research.
 Not applicable; this study involves computational experiments only and uses no human participants, animal subjects, or personal data.
 
 \paragraph{Data availability.}
-All generated artifacts (JSON and CSV files) are available in the repository and in the archived release. No external datasets were used; all data are produced by the included scripts.
+All generated artefacts (JSON, CSV, and NPZ files) are produced by the included scripts and are available in the repository and the archived release. No external datasets were used.
 
 \paragraph{Code availability.}
 Source code is available at \url{https://github.com/ioannist/six-birds-agent}. A permanent archive of the code is deposited at Zenodo under DOI \href{https://doi.org/10.5281/zenodo.18451887}{10.5281/zenodo.18451887}.
 
 \paragraph{Author contributions.}
-I.T.\ is the sole author and was responsible for conceptualization, methodology, software development, formal analysis, writing, and visualization.
+I.T.\ is the sole author and was responsible for conceptualisation, methodology, software, formal analysis, writing, and visualisation.
 
 \paragraph{Use of AI/LLMs.}
-LLM tools (Claude, Anthropic) were used as coding assistants for software scaffolding and manuscript formatting. All scientific content, claims, and experimental design were produced by the author. LLM outputs were reviewed and validated before inclusion.
+LLM tools (Claude, Anthropic; Codex, OpenAI) were used as coding assistants, for mathematical review of the code and proofs, and for editing and checking the manuscript text. The author designed the study, reviewed and validated all outputs, and takes responsibility for the content.

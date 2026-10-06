@@ -1,8 +1,40 @@
 {
-  "hash_packaging_off": "a6cb93244f7b9ea35a3becdee4fc19bd7ceea6c5288fa35a145ec2e5f111b035",
-  "hash_packaging_on": "df5dc0d3aeb20f7a90789a55f11bd1d96e6a1c10187ba028b939d631564f4892",
+  "hash_packaging_off": "f9433cc76ea28c391bb86a42bc23c2d9251e0a50ff408e57b370879e198e96c0",
+  "hash_packaging_on": "053a3f71506d8b061041de4078382e4a8a676f0eb9a27e65e8e8fe2bcb8aa695",
   "defect_off_tau2": 1.0,
   "defect_on_tau2": 0.0,
+  "coherent_K_off": 0,
+  "coherent_K_on": 16,
+  "packaging_controls": [
+    {
+      "label": "No repair: always move RIGHT",
+      "config_hash": "f9433cc76ea28c391bb86a42bc23c2d9251e0a50ff408e57b370879e198e96c0",
+      "defect_tau2": 1.0,
+      "coherent_viable": 0,
+      "n_states": 64
+    },
+    {
+      "label": "Funded preventive repair",
+      "config_hash": "053a3f71506d8b061041de4078382e4a8a676f0eb9a27e65e8e8fe2bcb8aa695",
+      "defect_tau2": 0.0,
+      "coherent_viable": 16,
+      "n_states": 64
+    },
+    {
+      "label": "Same policy, repair always fails",
+      "config_hash": "659afbf046f2ba209f898bdd74cbb2a5a39d76d382c44f3933692592321024e3",
+      "defect_tau2": 0.0,
+      "coherent_viable": 0,
+      "n_states": 64
+    },
+    {
+      "label": "Idle without repair",
+      "config_hash": "8e32dd7893c37bb8f8bf738f1faec352d1a90183162ce00de8a641a40358abb1",
+      "defect_tau2": 0.0,
+      "coherent_viable": 0,
+      "n_states": 64
+    }
+  ],
   "protocol_hash_on": "6a3a640708dd552b56d217960cc950ce1134ddf896aa0a761aea589362cbbdd3",
   "protocol_hash_off": "c65aaf545518534638f34842585ed24da87fd9c9172897857f5ca93984fff681",
   "protocol_H_list": [
@@ -13,36 +45,278 @@
     5
   ],
   "protocol_emp_on": [
-    1.0493047506642952,
-    1.6613316537277607,
-    1.6328210780084584,
-    1.689441900502319,
-    1.6626508269138525
+    1.049619956505397,
+    1.7249085912825968,
+    1.7422937419156312,
+    1.846202348719717,
+    1.846202348719717
   ],
   "protocol_emp_off": [
-    1.0493047506642952,
-    1.121790232449197,
-    1.1034182513102877,
-    1.0856007783396602,
-    1.0718894391323397
+    1.049619956505397,
+    1.209977103096385,
+    1.2877260455760393,
+    1.2877260455760393,
+    1.2877260455760393
   ],
-  "sweep_run_id": "1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45",
-  "sweep_metric_minmax": {
-    "K_size_min": 0.0,
-    "K_size_max": 56.0,
-    "emp_median_min": 0.0,
-    "emp_median_max": 2.321928094887362
+  "ablations": {
+    "constraints_off": {
+      "config_hash": "7de906250ed8246c356a5a7b721c2bad499045903ec5092da049ae91b6005545",
+      "n_states": 96,
+      "kernel_size_viable": 64,
+      "empowerment_median_on_K": 1.7990668777479455,
+      "idempotence_defect": 1.0
+    },
+    "constraints_off_no_repair": {
+      "config_hash": "6dd35428192b34e65d676d310211abbb4f3851af1c1aac06026e04cee696f47e",
+      "n_states": 96,
+      "kernel_size_viable": 64,
+      "empowerment_median_on_K": 0.807261049218685,
+      "idempotence_defect": 1.0
+    },
+    "full": {
+      "config_hash": "6a3a640708dd552b56d217960cc950ce1134ddf896aa0a761aea589362cbbdd3",
+      "n_states": 96,
+      "kernel_size_viable": 64,
+      "empowerment_median_on_K": 1.7249085912825968,
+      "idempotence_defect": 0.3333333333333333
+    },
+    "high_noise": {
+      "config_hash": "accd757af2ba4d36ed8f261321e534bc278603d75a23a8ad6e7dc3056863db89",
+      "n_states": 96,
+      "kernel_size_viable": 64,
+      "empowerment_median_on_K": 1.2083006212374907,
+      "idempotence_defect": 0.3333333333333333
+    },
+    "learn_on": {
+      "config_hash": "a3a79deb23e7b3e4a4e6cdab47af41a048fa7635b4a33b202da6434660613879",
+      "n_states": 192,
+      "kernel_size_viable": 128,
+      "empowerment_median_on_K": 1.9608609240095995,
+      "idempotence_defect": 0.3333333333333333
+    },
+    "no_protocol": {
+      "config_hash": "c65aaf545518534638f34842585ed24da87fd9c9172897857f5ca93984fff681",
+      "n_states": 96,
+      "kernel_size_viable": 64,
+      "empowerment_median_on_K": 1.209977103096385,
+      "idempotence_defect": 0.3333333333333333
+    },
+    "no_repair": {
+      "config_hash": "d08950d1fa3ed9aaea8a3b81c89b474793a9763e52b5f73ce3cd729d39564414",
+      "n_states": 96,
+      "kernel_size_viable": 0,
+      "empowerment_median_on_K": 0.0,
+      "idempotence_defect": 0.0
+    },
+    "repair_imperfect": {
+      "config_hash": "e8ec106b76f6ca1bfffa513fcf068d045fb9c90198d6929259d44b1e41f62b74",
+      "n_states": 96,
+      "kernel_size_viable": 64,
+      "empowerment_median_on_K": 1.5767978824164115,
+      "idempotence_defect": 0.0
+    }
   },
+  "sweep_run_id": "1300e5235fa57af14a29f228b755231f30b57df4da65e032e32372920ae48c45",
+  "sweep_p_flip_values": [
+    0.0,
+    0.09999999999999999,
+    0.19999999999999998,
+    0.3,
+    0.39999999999999997,
+    0.49999999999999994,
+    0.6,
+    0.7
+  ],
+  "sweep_repair_cost_values": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "sweep_K_size": [
+    [
+      56.0,
+      47.0,
+      46.0,
+      46.0,
+      46.0,
+      46.0,
+      46.0,
+      46.0
+    ],
+    [
+      56.0,
+      7.0,
+      6.0,
+      5.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      56.0,
+      7.0,
+      6.0,
+      5.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      56.0,
+      7.0,
+      6.0,
+      5.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      56.0,
+      7.0,
+      6.0,
+      5.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      56.0,
+      7.0,
+      6.0,
+      5.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      56.0,
+      7.0,
+      6.0,
+      5.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      56.0,
+      7.0,
+      6.0,
+      5.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "sweep_emp_median": [
+    [
+      2.3219280948873626,
+      2.3219280948873626,
+      2.3219280948873626,
+      2.3219280948873626,
+      1.584962500721156,
+      1.584962500721156,
+      1.584962500721156,
+      1.584962500721156
+    ],
+    [
+      2.135427834970361,
+      2.135427834970361,
+      2.135427834970361,
+      2.0591483484469015,
+      2.0591483484469015,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      2.025023118408783,
+      2.0250231184087832,
+      2.0250231184087832,
+      1.9331419860982422,
+      1.9331419860982422,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.9394800928848634,
+      1.9394800928848637,
+      1.9394800928848637,
+      1.8594306657382786,
+      1.8594306657382786,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.8684729819294117,
+      1.8684729819294117,
+      1.8684729819294117,
+      1.813818155410236,
+      1.813818155410236,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.8073549220571685,
+      1.8073549220571685,
+      1.8073549220571685,
+      1.7715533031636117,
+      1.7715533031636117,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.8684729819294115,
+      1.8684729819294117,
+      1.8684729819294117,
+      1.813818155410236,
+      1.813818155410236,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.9394800928848634,
+      1.9394800928848634,
+      1.9394800928848634,
+      1.8594306657382786,
+      1.8594306657382786,
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
   "learning_hash_cfg": "a0f8e625732cf8d71b30da1f0da64ba53afef806e50d8a804aec95dea550ea06",
-  "learning_medians_theta0": 0.7330983751920465,
-  "learning_medians_theta1": 1.0045739033658136,
-  "learning_medians_theta2": 1.3416542136663907,
-  "holonomy_witness_tvd_on": 0.6720000000000003,
-  "holonomy_witness_tvd_off": 0.09600000000000003,
+  "learning_medians_theta0": 0.8405856767688804,
+  "learning_medians_theta1": 1.0522599206614844,
+  "learning_medians_theta2": 1.3695598907748634,
   "holonomy_witness_state": {
     "y": 0,
-    "r": 2,
+    "u": 0,
     "phi": 1,
-    "u": 0
+    "r": 2
+  },
+  "holonomy_witness_tvd_noisy": {
+    "on": 0.6720000000000003,
+    "off": 0.09600000000000003
+  },
+  "holonomy_witness_tvd_noise_free": {
+    "on": 0.6400000000000001,
+    "off": 0.0
   }
 }

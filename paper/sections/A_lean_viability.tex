@@ -1,16 +1,26 @@
-\section{Lean anchor: viability iteration computes the greatest fixed point}
+\section{The Lean development}
 \label{app:lean_viability}
 
-The viability kernel in Section~\ref{sec:engine} is computed as the limit of iterating a monotone, contracting operator on a finite lattice of sets. In a finite setting, iterating from the top element stabilizes at a fixed point, and this fixed point is greatest among all fixed points (a finite Tarski-style result) \citep{tarski1955}.
+The file \texttt{lean/Agency/Viability.lean} formalises the finite fixed-point argument behind the viability computation of \cref{sec:engine}, in Lean~4 with mathlib \citep{demoura2021lean4,mathlib2019}. This appendix states its results in mathematical form; Lean names are given in parentheses.
 
-We formalize this statement in Lean 4 (mathlib) for operators on \texttt{Finset} with decidable equality and finiteness assumptions \citep{demoura2021lean4,mathlib2019}. The main exported theorem in \texttt{lean/Agency/Viability.lean} is:
+\paragraph{Bounded stabilisation from any finite start.}
+Let $F$ be a map on finite subsets of a type $\alpha$ that is contracting, $F(K)\subseteq K$ for all $K$, and let $K_0$ be a finite set. Then some iterate $F^n(K_0)$ with $n\le |K_0|$ is a fixed point (\lean{iterate_stabilizes_bounded}). The bound counts strict removals: each iteration that changes the set removes at least one element. No finiteness of $\alpha$ and no decidable equality on it are assumed. If $F$ is also monotone, this fixed point contains every fixed point $S\subseteq K_0$ (\lean{iterate_greatest_fixpoint_bounded_from}).
 
-\begin{verbatim}
-theorem iterate_top_greatest_fixpoint
-  (F : Finset α → Finset α) (hmono : Monotone F) (hsub : ∀ s, F s ⊆ s) :
-  ∃ n : Nat,
-    let K := Nat.iterate F n Finset.univ
-    F K = K ∧ ∀ S : Finset α, F S = S → S ⊆ K
-\end{verbatim}
+\paragraph{The viability operator.}
+For a safe set $\Safe$, feasible-action sets $\Afeas(s)$, and successor sets $\Post(s,a)$, the operator
+\[
+\mathcal{V}(K)=\{s\in K : s\in\Safe \text{ and } \exists a\in\Afeas(s),\ \Post(s,a)\subseteq K\}
+\]
+is proved to be contracting and monotone (\lean{viabilityOperator_contracting}, \lean{viabilityOperator_monotone}); these are theorems about the operator, not hypotheses. Its fixed points are exactly the sets $K\subseteq\Safe$ in which every state has a feasible action with $\Post(s,a)\subseteq K$ (\lean{viabilityOperator_fixpoint_iff}).
 
-In words: for any monotone operator $F$ that is pointwise contracting ($F(s)\subseteq s$), some iterate of $F$ applied to the top element (\texttt{univ}) yields a fixed point $K$, and every other fixed point $S$ is a subset of $K$.
+\paragraph{The kernel computed from the safe set.}
+Iterating $\mathcal{V}$ from $\Safe$, as the implementation does, reaches after $n\le|\Safe|$ steps a safe controlled-invariant set that contains every safe controlled-invariant set (\lean{viability_iteration_greatest_bounded}). This is the viability kernel. In the implementation, whose recorded history includes the starting set and the final repeated set, this means at most $|\Safe|+1$ evaluations of the operator.
+
+\paragraph{Feedback and pathwise safety.}
+Controlled invariance of $K$ yields a stationary selector that assigns to each state of $K$ a feasible action whose successor set lies in $K$; it is defined only on $K$, so an empty $K$ needs no default action (\lean{controlledInvariant_stationary_policy}). For any policy with $\Post(s,\mathrm{policy}(s))\subseteq K$ on $K$, every path that starts in $K$ and whose steps stay within the successor sets remains in $K$ forever (\lean{stationary_policy_paths_safe}). This is pathwise safety; it involves no probabilities.
+
+\paragraph{The top-set form.}
+The development also exports the classical form (\lean{iterate_top_greatest_fixpoint}): for monotone, contracting $F$ on the finite subsets of a finite type, some iterate of $F$ from the full set is a fixed point containing every fixed point. A strengthened form adds the bound $n\le|\alpha|$ (\lean{iterate_top_greatest_fixpoint_bounded}).
+
+\paragraph{Scope.}
+The general operator allows empty successor sets, so its invariance results hold in that generality; interpreting them as statements about a stochastic process requires non-empty supports, which the Python code enforces. The correspondence between the floating-point kernels and these finite sets is tested, not proved. Probabilities, channel capacities, and packaging maps are outside the formalisation. The audit file \texttt{lean/Audit.lean} prints the axioms used by each exported theorem: \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}, with the pathwise-safety theorem using only \texttt{propext} and \texttt{Quot.sound}.

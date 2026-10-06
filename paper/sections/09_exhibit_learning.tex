@@ -1,30 +1,26 @@
-\section{Exhibit: operator rewriting thickens causal control (learning $\theta$)}
+\section{Skill as a change of law}
 \label{sec:ex_learning}
 
-This exhibit isolates P$_1$ (operator-write): \emph{learning as induced law change}. In \SBT, P$_1$ is not merely storing facts; it is rewriting the effective transition operator so the same boundary interventions become more reliable, cheaper, or higher-bandwidth. In the engine (Section~\ref{sec:engine}) this should show up as increased difference-making capacity: higher feasible empowerment under comparable constraints.
+This experiment isolates P$_1$, operator rewriting. In \SBT, learning in this sense is not storing facts but changing the effective transition law, so that the same interface moves become more reliable. If that is right, higher skill should show up as more difference-making under the same constraints.
 
-\subsection{Setup: a discrete skill variable that rewrites dynamics}
-We use a ring-world configuration with a discrete skill variable $\theta\in\{0,1,2\}$ that reduces effective slip/noise in the dynamics. Intuitively: higher $\theta$ corresponds to a better internal model or controller that executes the same LEFT/RIGHT interface moves with fewer unintended outcomes. This is the operational surrogate of P$_1$: changing $\theta$ changes the induced kernel $P[a,s,s']$ (the law), not merely the agent's memory.
+\subsection{Setup}
+We use the skill configuration of \cref{tab:configs}. A skill level $\theta\in\{0,1,2\}$ is part of the state and lowers the slip probability from $0.40$ to $0.25$ to $0.10$. A LEARN action raises $\theta$, but it is not used as a channel input here: we compare fixed skill levels rather than modelling a learning process. There is no protocol, no damage noise, and no repair, and all actions are free, so every sequence is affordable and $\Emp_{\mathrm{feas}}=\Emp$.
 
-To isolate the operator effect from budgets, we set action costs to zero in this configuration; feasibility is therefore trivial (all sequences are feasible), and empowerment reflects reliability/controllability rather than spending power. Since all action costs are zero in this configuration, feasibility is trivial and $\Emp_{\mathrm{feas}}=\Emp$ here. We measure empowerment at horizon $H=2$ using the outside position lens $f(s)=y$, and we summarize by the \emph{median} empowerment over viable states in each $\theta$-sector (restricting to a fixed staged phase and a coherent internal bit to avoid conflating $\theta$ with trivial staging effects).
+The skill level indexes sectors of the kernel with different slip, so changing $\theta$ changes the transition law that the agent's moves obey, rather than adding a record that the agent consults. For each $\theta$ we compute empowerment at $H=2$ to the position $y$, with LEFT and RIGHT as channel inputs, from every undamaged state of the viability kernel (safety $r\ge1$) with that skill level, and report the median.
 
-\subsection{Result: empowerment increases monotonically with skill}
-Figure~\ref{fig:learning_theta} shows the median empowerment as a function of $\theta$. The measured medians (bits) are:
-\begin{align*}
-\mathrm{median}\ \Emp_{\mathrm{feas}}(\theta=0) &= 0.7330983751920465,\\
-\mathrm{median}\ \Emp_{\mathrm{feas}}(\theta=1) &= 1.0045739033658136,\\
-\mathrm{median}\ \Emp_{\mathrm{feas}}(\theta=2) &= 1.3416542136663907.
-\end{align*}
-Thus, higher skill yields a strictly larger action channel to outside futures at the same horizon.
+\subsection{Result}
+Median empowerment rises with skill (\cref{fig:learning_theta}):
+\[
+0.841 \ (\theta=0), \qquad 1.052 \ (\theta=1), \qquad 1.370 \ (\theta=2) \ \text{bits}.
+\]
+With less slip, the same two-move sequences produce more sharply separated distributions of the outside position, so more of them can be told apart from the outcome.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.78\linewidth]{figures/fig_learning_theta.png}
-  \caption{Operator rewriting (P$_1$) increases difference-making. Median feasible empowerment (bits) at horizon $H=2$ using output lens $f(s)=y$ (outside position), grouped by discrete skill $\theta$ that reduces effective slip/noise in the ring-world kernel. Empowerment increases monotonically with $\theta$, consistent with P$_1$ as an induced law change rather than merely an internal record.}
+  \includegraphics[width=0.5\linewidth]{figures/fig_learning_theta.pdf}
+  \caption{Median empowerment (bits) at $H=2$ to the outside position, by skill level. Each skill level lowers the slip probability, shown under each value; medians are over all undamaged viable states at that level.}
   \label{fig:learning_theta}
 \end{figure}
 
-\subsection{Interpretation: learning as ``causal thickening''}
-This is the minimal learning-as-agency statement in \SBT terms. Packaging and viability (P$_5$/P$_6$) can make an induced layer persist, and protocol holonomy (P$_3$) can add horizon-dependent reachability, but P$_1$ changes something deeper: it changes the \emph{effective physics} of the induced layer. Increasing $\theta$ rewrites the transition structure so that interface interventions map to outside consequences with higher reliability; the induced theory becomes sharper, and the agent becomes more capable of throwing a stone in the counterfactual sense.
-
-In the thesis language, this is the point at which ``agent as theory object'' becomes quantitative: operator rewriting (higher $\theta$) does not merely store information, it changes the effective transition law so the same interface interventions map to outside consequences with higher reliability. The theory remains the same induced layer, but the agent object becomes a better compiler of causes at the boundary, producing a higher-capacity action channel to outside futures.
+\subsection{Interpretation}
+Packaging and viability (P$_5$, P$_6$) make a package persist, and protocol cycles (P$_3$) add reach over longer horizons. Operator rewriting acts on something else: the effective law of the induced level. Raising $\theta$ makes interface moves map to outside consequences more reliably, so the agent can make more distinguishable differences with the same moves. In the language of the thesis, the theory is unchanged as a level of description, but the theory object it hosts becomes a better channel from interface to outside. The experiment is stylised: skill is a fixed parameter that scales one noise source, and we do not model how it is acquired.

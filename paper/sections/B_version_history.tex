@@ -1,0 +1,21 @@
+\section{Version history}
+\label{app:versions}
+
+\paragraph{Version 1 (31 January 2026).}
+First public version (Zenodo, DOI \href{https://doi.org/10.5281/zenodo.18439737}{10.5281/zenodo.18439737}).
+
+\paragraph{Version 2.}
+Editorial and formatting changes in preparation for preprint-server submission; no change to results.
+
+\paragraph{Version 3 (6 October 2026).}
+A review of the mathematics and code led to the following changes.
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+  \item The capacity computation now uses the standard Blahut--Arimoto update, including the factor $p_k(\alpha)$, and stops on an explicit gap between lower and upper bounds. All empowerment values were recomputed. The protocol and skill separations survive the correction; the cost-only and combined cost-and-repair ablations are now distinguished.
+  \item The packaging experiment now uses a funded substrate in which every repair is affordable and can be sustained. The previous setup could not pay for sustained repair, and part of its policy issued unaffordable commands. Controls were added showing that a zero packaging defect does not by itself indicate maintenance.
+  \item The order-dependence witness is reported both with damage noise, where the protocol-free regime also shows order effects, and in a matched noise-free form.
+  \item The cost ablation now changes only movement costs; the earlier combined change, which also removed repair, is reported separately. The identity setting now affects the state space when switched off, although the reported ring-world experiments use a single identity value.
+  \item The noise--maintenance sweep is explained as a change of support at zero noise plus a repair-cost threshold.
+  \item The scope of feasible empowerment (open-loop, initial budget, not restricted to safe behaviour) and the modal character of the packaging defect are stated explicitly.
+  \item The Lean development was extended to the viability operator itself, with a bound on the number of iterations, a characterisation of fixed points, and pathwise safety of invariant feedback.
+  \item The exposition, figures, and tables were revised throughout.
+\end{itemize}

@@ -7,9 +7,14 @@
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
 \usepackage{xcolor}
 \usepackage{fancyhdr}
 \usepackage{hyperref}
+\usepackage{xurl}
 \hypersetup{
   colorlinks=true,
   linkcolor=blue!70!black,
@@ -21,15 +26,22 @@
 }
 \usepackage{enumitem}
 \usepackage{natbib}
+\usepackage[capitalise,noabbrev]{cleveref}
 \usepackage{orcidlink}
 
 \newcommand{\SBT}{Six Birds Theory}
 \newcommand{\Emp}{\mathrm{Emp}}
 \newcommand{\K}{\mathcal{K}}
 \newcommand{\Alpha}{\mathcal{A}}
+\newcommand{\Def}{\mathrm{Def}}
+\newcommand{\Post}{\mathrm{Post}}
+\newcommand{\Safe}{\mathrm{Safe}}
+\newcommand{\Afeas}{A_{\mathrm{feas}}}
 \DeclareUnicodeCharacter{03B1}{\ensuremath{\alpha}}
 \DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
 \DeclareUnicodeCharacter{2203}{\ensuremath{\exists}}
 \DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
 \DeclareUnicodeCharacter{2286}{\ensuremath{\subseteq}}
 \DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+
+\newcommand{\lean}[1]{\path{#1}}

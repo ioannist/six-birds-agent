@@ -11,11 +11,11 @@
 \title{To Throw a Stone with Six Birds: On Agents and Agenthood}
 \author{Ioannis Tsiokos\,\orcidlink{0009-0009-7659-5964}}
 \affiliation{}
-\date{31 January 2026\\[4pt]{\small Version 2 (revised 10 February 2026) \quad$\cdot$\quad Zenodo v1: \href{https://doi.org/10.5281/zenodo.18439737}{10.5281/zenodo.18439737}}}
+\date{31 January 2026\\[4pt]{\small Version 3 (6 October 2026) \quad$\cdot$\quad DOI: \href{https://doi.org/10.5281/zenodo.23184176}{10.5281/zenodo.23184176}}}
 
 \fancypagestyle{firstpage}{%
   \fancyhf{}
-  \fancyfoot[C]{\scriptsize Automorph Inc., Wilmington, DE, USA \quad \texttt{ioannis@automorph.io} \quad DOI: \href{https://doi.org/10.5281/zenodo.18439737}{10.5281/zenodo.18439737} \quad \textcopyright\ 2026 \quad CC-BY 4.0 \quad Preprint --- not peer reviewed.}
+  \fancyfoot[C]{\scriptsize Automorph Inc., Wilmington, DE, USA \quad \texttt{ioannis@automorph.io} \quad DOI: \href{https://doi.org/10.5281/zenodo.23184176}{10.5281/zenodo.23184176} \quad \textcopyright\ 2026 \quad CC-BY 4.0 \quad Preprint --- not peer reviewed.}
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0pt}
 }
@@ -26,7 +26,7 @@
 \printaffiliation
 
 \begin{abstract}
-We present a reproducible computational framework for defining and measuring agency in finite controlled Markov kernels without assuming goals, utilities, or homunculi. The framework operationalizes three complementary metrics: (i)~viability kernels (greatest controlled-invariant safe sets under ledger-gated feasibility and successor-support semantics), (ii)~feasible empowerment (channel capacity of the induced action-to-output channel restricted by budgets), and (iii)~an empirical packaging endomap whose idempotence defect quantifies objecthood for coarse lenses. Building on Six Birds Theory (SBT, \citep{six_birds_theory}), we propose that an agent is a \emph{theory object}---a maintained package inside an induced layer with a ledger-gated interface---and we separate \emph{agenthood} (enablement: the layer exists and persists) from \emph{agency} (causation: interface interventions change outside futures). Throughout, ``theory'' is used in the SBT technical sense---a closure (lens + completion + audit)---not as a speculative hypothesis or manuscript-type category. Across matched-control ablations in a minimal ring-world substrate, we obtain four auditable separations: (1)~calibrated null regimes prevent false positives (single-action: 0-bit empowerment; schedule trap: 1~bit under the wrong model, 0 under the correct one); (2)~enabling repair collapses idempotence defect at $\tau=2$ from 1 to 0; (3)~enabling protocol holonomy leaves $H=1$ unchanged but increases empowerment for $H\ge2$; and (4)~operator rewriting (skill $\theta$) monotonically increases median empowerment ($0.73\to1.34$ bits). All experiments are driven by deterministic, hash-traceable scripts with a strict audit mode, and a Lean~4 anchor formalizes the viability-kernel fixed-point property. We are explicit that stronger claims about goals, consciousness, or real organisms are not established here; our conclusions rely on finite witnesses and operational proxies under explicit controls.
+What does it take for a system to have choices that make a difference? We study this question in finite controlled Markov kernels, without assuming goals, utilities, or an inner agent. Following Six Birds Theory (SBT) \citep{six_birds_theory}, we treat an agent as a \emph{theory object}: a package that is maintained inside an induced description of the system and that has a budgeted interface to the rest of the world. This lets us separate \emph{agenthood}, the existence and persistence of such a package, from \emph{agency}, the ability of its interface choices to change what happens outside. Three computable measures make the distinction concrete: the viability kernel (the largest set of safe states in which every state has an affordable action whose possible successors all remain in the set), feasible empowerment (the channel capacity from affordable action sequences to a later outside variable), and the idempotence defect of a coarse-grained packaging map. Two null tests guard against false positives: a single-action system has zero empowerment, and an external schedule mistaken for an action yields a spurious 1~bit. In a small ring world with switchable mechanisms we then obtain three controlled comparisons. With funded preventive repair, the packaging defect at a full phase cycle falls from 1 to 0 and the set of states that can be kept coherent grows from empty to 16; controls show that a zero defect alone does not identify maintenance. A phase-dependent step leaves one-step empowerment unchanged but raises the sampled median at two steps from 1.21 to 1.72~bits. Reducing slip raises median empowerment from 0.84 to 1.37~bits. A Lean~4 development proves that the viability iteration reaches the greatest safe controlled-invariant set after at most as many strict removals as there are safe states. All results are finite witnesses produced by deterministic, audited scripts.
 \end{abstract}
 \noindent\textbf{keywords:} agency; agenthood; viability kernel; controlled invariance; empowerment; channel capacity; Markov decision processes; reproducible artifacts
 
@@ -46,6 +46,7 @@ We present a reproducible computational framework for defining and measuring age
 
 \appendix
 \input{sections/A_lean_viability}
+\input{sections/B_version_history}
 \clearpage
 \bibliographystyle{plainnat}
 \bibliography{bib/refs}

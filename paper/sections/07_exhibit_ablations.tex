@@ -1,36 +1,43 @@
-\section{Exhibit: primitive ablations (a quantitative toggle table)}
+\section{Ablations}
 \label{sec:ex_ablations}
 
-The previous exhibits isolated single mechanisms (maintenance for packaging; protocol for horizon-dependent control) and validated null baselines. This exhibit summarizes the same results as a compact toggle suite: we weaken or disable specific mechanisms corresponding to the \SBT\ primitives and measure the three operational proxies defined in Section~\ref{sec:engine}:
-(i) viability kernel size $|\K|$,
-(ii) median feasible empowerment on $\K$ (bits), and
-(iii) packaging idempotence defect for a coarse macro lens.
+The previous experiments isolated one mechanism at a time. Here we change single ingredients of the reference ring world, plus one combined change, and record all three measures, to see which measure responds to which change and where they can mislead.
 
-\subsection{Ablation suite and metrics}
-Each row of Table~\ref{tab:ablations} corresponds to a configuration of the ring-world environment with a small number of toggles (protocol on/off, repair on/off, constraint costs on/off, learning on/off, noise strength, repair success). The table is generated from audited artifacts (Section~\ref{sec:repro}) and is included here verbatim to keep the paper aligned with reproducible outputs.
+\subsection{Measures}
+Each row of \cref{tab:ablations} is a configuration that differs from the reference model (the protocol-on configuration of \cref{sec:ex_holonomy}) in the way named; all rows but one change a single ingredient, and the row ``free movement and REPAIR removed'' changes two. For each we report:
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+  \item $|\K|$, the size of the viability kernel for the safety predicate $r\ge1$ (staying funded; damage is not part of safety here);
+  \item the median of $\Emp_{\mathrm{feas}}$ at $H=2$ to the position $y$, over 32 start states sampled from $\K$ with seed $0$, with all available actions as channel inputs;
+  \item $\Def(E)$ at $\tau=2$ under the lens $(y,r,\phi)$ and a fixed reactive policy: REPAIR if damaged and affordable, otherwise RIGHT.
+\end{itemize}
 
 \begin{table}[t]
 \centering
 \small
 \input{generated/ablations_summary.tex}
-\caption{Primitive ablations summary (generated). Columns: viability kernel size $|\K|$, median feasible empowerment on $\K$ (bits) at horizon $H=2$ using output lens $f(s)=y$, and packaging idempotence defect (Section~\ref{sec:engine}). Higher $|\K|$ indicates a larger robust controlled-invariant safe set under ledger-gated feasibility; higher empowerment indicates greater counterfactual difference-making; lower defect indicates more object-like macro labels under a coarse lens. Unless otherwise stated in an exhibit, viability here uses a ledger-only safety predicate $\mathrm{Safe}(s):=(r(s)\ge 1)$ (the sweep exhibit additionally requires $u=0$ to treat coherence as safety). All rows use the same observational contract for comparability: output lens $f(s)=y$, packaging lens $\pi=(y,r,\phi)$, empowerment horizon $H=2$, and packaging horizon $\tau=2$ (unless an exhibit explicitly states a different safety predicate or lens).}
+\caption{Ablations of the reference ring world (two phases with protocol, ledger $0$--$2$, movement cost $1$, free REPAIR, no income, $p_{\mathrm{flip}}=0.1$, $p_{\mathrm{slip}}=0.2$). ``States'' is the size of the state space. Median empowerment is at $H=2$ over 32 sampled viable states; $\Def(E)$ is at $\tau=2$ under the reactive policy described in the text. Adding LEARN doubles the state space and adds a channel input, so that row is not directly comparable with the others.}
 \label{tab:ablations}
 \end{table}
 
-\subsection{Reading the table in Six Birds terms}
-The table makes three structural points explicit.
+\subsection{Reading the table}
+\paragraph{Viability responds to whether the ledger can be preserved.}
+Removing REPAIR empties the viability kernel. The reason is specific to this configuration: there is no income, every move costs one unit, and the free REPAIR action is the only way to act without spending. Without it, every affordable action lowers the ledger, so no state can stay funded forever. This shows that viability detects the loss of a sustainable action; it is not, in this configuration, a statement about repairing damage, since damage plays no role in the safety predicate. (Damage-sensitive viability is studied in \cref{sec:ex_packaging,sec:ex_sweep}.) In every other row, including both free-movement rows, some action keeps the ledger at or above one, and $\K$ is the full set of states with $r\ge1$.
 
-First, \textbf{agenthood is not guaranteed by dynamics alone}. When maintenance/repair is removed under costs (the \texttt{no repair} row), the viability kernel collapses ($|\K|=0$). In the engine semantics, this means there exists no state from which any feasible policy can keep all successor support inside a safe set. If the package cannot be maintained, there is no stable agent layer in which ``actions'' persist.
+\paragraph{Empowerment responds to the protocol.}
+The reference and protocol-off rows have the same viability kernel and the same defect, but median empowerment drops from $1.725$ to $1.210$~bits without the protocol, in line with \cref{sec:ex_holonomy}.
 
-Second, \textbf{difference-making depends on protocol structure, not only on action availability}. Comparing \texttt{full} to \texttt{no protocol}, we see the same $|\K|$ and the same packaging defect, but a substantial drop in feasible empowerment when protocol holonomy is disabled. This matches the P$_3$ claim from Exhibit~\ref{sec:ex_holonomy}: noncommutativity enriches the reachable outside futures only at multi-step horizons.
+\paragraph{The cost ablation changes only costs.}
+Setting movement costs to zero, with all actions kept, slightly raises median empowerment ($1.725$ to $1.799$~bits), since every two-step sequence becomes affordable. Removing costs \emph{and} REPAIR together gives $0.807$~bits. The large drop in that combined change therefore comes from losing the REPAIR action as a channel input, not from removing costs. With free movement the ledger can no longer run out and force the agent to stand still (the reactive policy still pauses to repair when damaged), and the defect is $1$.
 
-Third, \textbf{constraints and accounting shape what counts as an action channel}. The \texttt{constraints off} row illustrates that removing costs changes which sequences are feasible and therefore changes both empowerment and the viability story---but it does not automatically produce objecthood. Packaging stability is a separate axis (captured by idempotence defect) that depends on closure and maintenance, not on ``freedom to act'' alone.
+\paragraph{The defect tracks whether the agent comes to rest.}
+In this unfunded configuration the defect column mostly reflects ledger exhaustion rather than maintenance. In the rows without REPAIR and with imperfect repair, the most likely label two steps ahead always has an empty ledger; at $r=0$ the agent cannot pay to move and stays in place, so those labels are fixed points and the defect is $0$. In the reference model the agent pays to move while it can, and the labels that fail the idempotence test $E(E(x))=E(x)$ are exactly the 16 of 48 labels with a full ledger ($r=2$), giving a defect of $1/3$. The defect therefore cannot be read as a maintenance score across these rows. As in \cref{sec:ex_packaging}, a zero defect can come from coming to rest, and it is viability with an appropriate safety predicate that tracks maintenance.
 
-The remaining rows (e.g., increased noise, imperfect repair, and learning/skill) should be read as quantitative perturbations: weakening the maintenance channel or increasing noise shrinks viable structure and reduces difference-making, while operator rewriting can recover some control capacity by reducing effective noise (expanded in Exhibit~\ref{sec:ex_learning}).
+\paragraph{Other perturbations.}
+Higher noise lowers median empowerment to $1.208$~bits, and imperfect repair to $1.577$~bits, while $|\K|$ is unchanged because the safety predicate concerns only the ledger. These are quantitative perturbations of a single sampled median; changes in the state space can also change which states are sampled, so differences between rows should not be read as universal effect sizes.
 
-\subsection*{Takeaways}
+\subsection{Summary}
 \begin{itemize}[leftmargin=*, itemsep=0.25em]
-  \item \textbf{Maintenance gates existence.} Without budgeted maintenance, the robust viability kernel can collapse to $\emptyset$, leaving no stable agent layer.
-  \item \textbf{Protocol creates control beyond one step.} With the same viability and packaging, enabling holonomy increases feasible empowerment by expanding horizon-dependent reachability.
-  \item \textbf{Action is feasibility, not fantasy.} Changing costs and admissibility reshapes empowerment and viability, but objecthood (packaging defect) remains a distinct requirement tied to closure and repair.
+  \item \textbf{Viability tracks sustainability.} Removing the only cost-free action, with no income, leaves no state that can be kept funded.
+  \item \textbf{Protocol increases control.} With the same viability kernel, the phase-dependent step raises median empowerment at two steps.
+  \item \textbf{Measures must be read for what they compute.} Removing costs alone barely changes empowerment, and a zero packaging defect can reflect an agent that has run out of resources and stopped.
 \end{itemize}

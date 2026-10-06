@@ -1,0 +1,17 @@
+{
+  "action": "created new-version draft",
+  "concept_record_id": "18439736",
+  "dashboard_url": "https://zenodo.org/uploads/23184176",
+  "doi": "10.5281/zenodo.23184176",
+  "doi_reservation": {
+    "client": "datacite",
+    "identifier": "10.5281/zenodo.23184176",
+    "provider": "datacite",
+    "verified_via": "rdm_pid_table"
+  },
+  "draft_id": 23184176,
+  "recorded_at": "2026-10-06T09:22:37+00:00",
+  "source_doi": "10.5281/zenodo.18439737",
+  "source_record_id": 18439737,
+  "source_title": "To Throw a Stone with Six Birds: On Agents and Agenthood"
+}

@@ -1,42 +1,53 @@
-\section{Exhibit: repair makes objecthood}
+\section{Maintenance and objecthood}
 \label{sec:ex_packaging}
 
-This exhibit isolates a minimal claim: \emph{packaging stability depends on maintenance}. In the engine (Section~\ref{sec:engine}) we defined an empirical packaging endomap $E$ for a macro lens $\pi$ that hides microstate, and an idempotence defect $\mathrm{Def}(E)$ that quantifies whether macro labels behave like stable objects under that lens. Here we show that allowing a repair/maintenance action (P$_6$) collapses defect from maximal to zero at a coherence-aligned horizon.
+This experiment asks whether paying for maintenance makes a coarse description behave like an object, and what the packaging defect can and cannot tell us about that.
 
-\subsection{Setup: a lens that hides microstate}
-We use the ring-world substrate whose full microstate includes an outside coordinate $y$ on a ring, an internal damage bit $u$, a staged phase variable $\phi$, a ledger $r$, and (optionally) identity/skill sectors. The crucial choice is the macro lens:
-\[
-\pi(y,u,\phi,r,\dots)\;:=\;(y,r,\phi),
-\]
-i.e., the lens \emph{intentionally ignores} the damage bit $u$. This is exactly the situation in which ``objecthood'' is nontrivial: if $u$ churns underneath but the induced macro labels remain stable, then the lens has packaged the micro-churn into an object-like macro description; if the labels fail to compose, then the lens does not induce an object.
-
-Because the lens includes the staged phase $\phi$ with period $m_{\phi}=2$, idempotence is only meaningful at horizons $\tau$ that respect staging. We therefore emphasize $\tau=2$ (a full phase cycle), which factors out the trivial non-idempotence that would occur at odd $\tau$ purely from the $\phi$ shift. Figure~\ref{fig:packaging_ring} reports $\mathrm{Def}(E)$ across $\tau$; we highlight $\tau=2$ because it is the \emph{first} staging-aligned horizon (a full phase cycle), i.e., the earliest point at which idempotence can hold without being blocked by the $\phi$ shift.
-
-\subsection{Two regimes: repair disabled versus repair enabled}
-We compare two regimes that are identical except for whether REPAIR is present and used.
+\subsection{Setup}
+We use the funded ring world of \cref{tab:configs}. Every step earns one unit of ledger, the ledger holds at most one unit, movement is free, and REPAIR costs one unit and resets the damage bit with certainty. A repair therefore spends the unit that the same step earns back, so repair can be paid for indefinitely. The two regimes differ only in whether REPAIR is available:
 \begin{itemize}[leftmargin=*, itemsep=0.25em]
-  \item \textbf{Repair OFF:} the policy always moves RIGHT; the damage bit $u$ can flip due to noise, but the agent cannot pay to reset it.
-  \item \textbf{Repair ON:} the policy uses REPAIR whenever $u=1$ (when feasible) and otherwise moves RIGHT; repair succeeds with probability $1$ when executed.
+  \item \textbf{No repair:} the policy always moves RIGHT. The damage bit flips with probability $0.1$ per step, in either direction, and nothing corrects it.
+  \item \textbf{Funded preventive repair:} the policy repairs whenever it can pay (whenever $r\ge 1$), whether or not damage is present, and otherwise moves RIGHT. Every command it issues is affordable.
 \end{itemize}
-For each macro label $x=(y,r,\phi)$, we initialize the reference distribution uniformly over its fiber $S_x=\{s:\pi(s)=x\}$ and roll forward $\tau$ steps under the policy to define the endomap $E(x)$ as the mode macro label (Section~\ref{sec:engine}). The idempotence defect $\mathrm{Def}(E)$ then reports what fraction of macro labels fail the compositional stability test $E(E(x))=E(x)$.
+A state with $r=0$ moves RIGHT once and then has a unit to spend, so under the repair policy the agent soon stays in place and repairs at every step.
 
-\subsection{Result: defect collapses at $\tau=2$}
-Figure~\ref{fig:packaging_ring} plots $\mathrm{Def}(E)$ versus horizon $\tau$ for the two regimes. At $\tau=2$ we obtain:
+The macro lens keeps position, ledger, and phase and hides the damage bit,
 \[
-\mathrm{Def}(E)_{\text{repair OFF}} = 1.0,
-\qquad
-\mathrm{Def}(E)_{\text{repair ON}} = 0.0.
+\pi(y,u,\phi,r,g,\theta) = (y,r,\phi),
 \]
-That is: without maintenance, the macro labels $(y,r,\phi)$ behave maximally non-object-like under composition; with maintenance, the same coarse lens becomes perfectly idempotent at the staging-aligned horizon.
+which gives 32 coarse labels. This is the situation in which objecthood is non-trivial: the hidden bit churns underneath, and the question is whether the visible labels stay self-consistent. Because the phase alternates with period two, the label after an odd number of steps always has the other phase, so idempotence can only hold at even $\tau$. We focus on $\tau=2$, the first full phase cycle.
+
+We also measure \emph{coherent viability}: the viability kernel for the safety predicate $r\ge1$ and $u=0$, which asks for states that can be kept funded and undamaged with certainty.
+
+\subsection{Results}
+\Cref{fig:packaging} shows the defect for $\tau=1,\dots,10$. Without repair the defect is $1$ at every tested horizon: the agent keeps moving, and no label in the image of $E$ is a fixed point of $E$. With funded preventive repair the defect is $0$ at every even horizon tested and $1$ at every odd one, as the phase argument predicts. (Longer horizons can behave differently; without repair, for example, the exact defect is $0$ at $\tau=12$, where each starting position is again the unique most probable one.) At $\tau=2$,
+\[
+\Def(E)_{\text{no repair}} = 1, \qquad \Def(E)_{\text{funded repair}} = 0.
+\]
+The coherent viability kernel is empty without repair and contains 16 states with repair (\cref{tab:packaging_controls}). Without repair, positive damage noise means every action can produce an undamaged-to-damaged transition, so no set of coherent states can be kept coherent with certainty. With repair, every funded undamaged state ($r=1$, $u=0$) can repair, and every possible successor is again funded and undamaged; these are the 16 states $8\times2$ (position by phase), and the repair policy keeps them there.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.88\linewidth]{figures/fig_packaging_ring.png}
-  \caption{Packaging stability requires maintenance. Idempotence defect $\mathrm{Def}(E)$ of the empirical endomap $E$ under the macro lens $\pi(y,u,\phi,r,\dots)=(y,r,\phi)$ that hides the damage bit $u$. Repair disabled (policy cannot reset $u$) yields maximal defect at $\tau=2$; repair enabled and used collapses defect to zero at $\tau=2$.}
-  \label{fig:packaging_ring}
+  \includegraphics[width=0.72\linewidth]{figures/fig_packaging.pdf}
+  \caption{Idempotence defect of the packaging map under the lens $(y,r,\phi)$, which hides the damage bit, in the funded ring world. Over the horizons shown, the defect is $1$ without repair, and with funded preventive repair it is $0$ at every full phase cycle (shaded) and $1$ at odd horizons, where the phase label necessarily changes. Markers are offset horizontally for visibility.}
+  \label{fig:packaging}
 \end{figure}
 
-\subsection{Interpretation in Six Birds terms}
-This is the minimal ``objecthood requires payment'' statement. The lens $\pi$ is not enough by itself: if microstate can drift underneath with no compensating closure, then macro labels fail to behave like objects. Allowing repair introduces a P$_6$ transduction (spending budget to restore coherence) that, together with P$_5$ closure, stabilizes the induced macro description. In the language of the thesis, repair makes the induced \emph{theory layer} support stable \emph{theory objects}: at the staging-aligned horizon, the coarse macro labels behave like objects under composition, providing a well-typed substrate on which an agent object with an interface can be defined.
+\begin{table}[t]
+\centering
+\small
+\input{generated/packaging_controls.tex}
+\caption{Packaging defect and coherent viability (safety $r\ge1$, $u=0$) in the funded ring world. ``Repair always fails'' keeps the funded repair policy but sets the repair success probability to $0$. ``Idle without repair'' replaces repair by a zero-cost action that does nothing. Both controls reach zero defect, but neither can keep any state coherent.}
+\label{tab:packaging_controls}
+\end{table}
 
-In later exhibits we show that this stabilized package also supports nontrivial difference-making (feasible empowerment) and survives explicit guardrails that would otherwise produce false positives.
+\subsection{Controls: what zero defect does not show}
+The repair policy reaches zero defect partly because it stops moving: an agent that stays in place keeps its position label. Two controls separate this effect from repair itself (\cref{tab:packaging_controls}). If the same policy is kept but repair always fails, the defect is still $0$; if the agent simply idles with no repair available, the defect is also $0$. In both cases the coherent viability kernel is empty: from every undamaged state the damage bit can flip with positive probability, and nothing resets it.
+
+So in this system the contribution of repair is visible in viability, not in the packaging defect. The defect detects that coarse labels are self-reinforcing; viability detects that the hidden degrees of freedom are actually kept in order. The comparison is an existence witness under the named policies. It does not show that repair is necessary for low defect, and it does not show that zero modal defect implies stochastic persistence (\cref{sec:engine}).
+
+\paragraph{Exact checks.}
+The packaging maps were also computed with exact rational arithmetic and agree with the floating-point computation at $\tau=2$ for all four regimes. Some most-probable labels are exact ties, so the map depends on the tie-breaking rule. The separation does not: in the no-repair regime no admissible tie-break makes any label its own image, so every choice gives defect $1$; with funded repair every label in the image is the unique most probable label from itself, so every choice gives defect $0$.
+
+\subsection{Interpretation}
+In \SBT\ terms, a lens alone does not make an object. When hidden variables drift with nothing to compensate, the coarse labels either fail to be self-consistent or, if they are self-consistent, they hide a package that is quietly falling apart. Paid repair is a resource-accounting mechanism (P$_6$) that, together with closure (P$_5$), keeps the hidden variables in order; the viability kernel is the measure that registers it. The funded repair regime therefore supplies what the agent definition of \cref{sec:engine} requires on the agenthood side: a non-empty set of states that can be maintained, under a lens whose labels are object-like at the natural horizon.

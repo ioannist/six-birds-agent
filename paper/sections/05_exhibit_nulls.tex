@@ -1,46 +1,35 @@
-\section{Exhibit: null regimes and trap checks}
+\section{Null tests}
 \label{sec:ex_nulls}
 
-The engine in Section~\ref{sec:engine} defines agency as \emph{difference-making}: there exist at least two feasible interface policies whose induced channel to outside futures has nonzero capacity. This is a powerful operational notion---and precisely because it is powerful, it is vulnerable to two classes of false positives:
-(i) confusing motion with control, and
-(ii) confusing exogenous structure with choice.
+Empowerment measures difference-making, and precisely because it is a strong notion it can be produced by mistake. Two mistakes are common: confusing motion with control, and confusing outside structure with choice. Every later empowerment result should be read against the two null tests in this section.
 
-This exhibit provides two guardrails (null regimes) that every later empowerment claim must survive.
-
-\subsection{Null A: single-action regimes have zero empowerment}
-If there is only one action available everywhere, then there is no choice variable and hence no action channel. In the notation of Section~\ref{sec:engine}, the action-sequence channel $W[\alpha,y]$ has exactly one input row (one possible $\alpha$), so its capacity is identically zero for any horizon $H$.
-
-We confirm this in an exact finite kernel with a nontrivial state evolution but a single action: the dynamics can move, but the agent cannot steer. The feasible empowerment values (bits) are:
+\subsection{Null A: one action means no choice}
+If only one action exists, there is only one action sequence, so the channel $W$ has a single row and its capacity is zero at every horizon. We check this on a three-state deterministic cycle with a single action. The system moves at every step, yet
 \[
-\Emp_{\mathrm{feas}}(H=1)=0,\quad
-\Emp_{\mathrm{feas}}(H=2)=0,\quad
-\Emp_{\mathrm{feas}}(H=3)=0.
+\Emp(H=1)=\Emp(H=2)=\Emp(H=3)=0 \text{ bits}.
 \]
-This baseline prevents an error of interpretation: \emph{being a dynamical subsystem is not the same as having agency}. Agency requires an input degree of freedom that can be intervened upon.
+Being a moving subsystem is not the same as having agency; agency requires an input that can be set.
 
-\subsection{Null B: the schedule trap (exogenous structure mis-modeled as choice)}
-A more subtle failure mode is the \emph{schedule trap}. Many environments contain an exogenous variable---a clock, schedule, or external forcing---that influences the next outside state. If we mistakenly treat this exogenous variable as if it were the agent's action, we manufacture a fictitious control channel and obtain spurious empowerment.
+\subsection{Null B: the schedule trap}
+Many systems contain an outside driver, such as a clock or schedule, that determines the next outside state. If this driver is wrongly treated as the agent's action, a control channel appears that does not exist.
 
-We demonstrate this with a minimal system where an exogenous schedule bit $s_{\mathrm{ext}}$ determines the next outside state $x$. In the \emph{correct} model, $s_{\mathrm{ext}}$ is part of the state/noise and the agent's actions are ineffective; the induced channel rows are identical and capacity is zero. In the \emph{incorrect} model, we collapse state and treat the schedule as a controllable ``action'' that directly sets $x$; this produces an apparent 1-bit channel even though no such control exists.
+Our minimal example has an outside state $x$ and a schedule bit $s_{\mathrm{ext}}$; at each step $x$ takes the value of $s_{\mathrm{ext}}$, and the schedule toggles. The agent has two actions, neither of which affects anything. In the \emph{correct} model the schedule is part of the state: starting with $x=0$ and the schedule bit equally likely to be $0$ or $1$, both actions produce the same distribution of $x$ after one step, so the channel rows are identical and the capacity is $0$. In the \emph{wrong} model the schedule is collapsed into the action, so ``choosing'' the action sets $x$ directly, and the capacity is $1$~bit (\cref{tab:nulls}).
 
 \begin{table}[t]
 \centering
 \small
-\begin{tabular}{@{}l l@{}}
+\begin{tabular}{@{}ll@{}}
 \toprule
-\textbf{Null regime} & \textbf{Empowerment / capacity (bits)} \\
+\textbf{Null test} & \textbf{Capacity (bits)} \\
 \midrule
-Null A (single action), $H=1$ & $0.0$ \\
-Null A (single action), $H=2$ & $0.0$ \\
-Null A (single action), $H=3$ & $0.0$ \\
-\addlinespace
-Null B (schedule trap), \emph{wrong} model & $1.0$ \\
-Null B (schedule trap), \emph{right} model & $0.0$ \\
+A: single action, $H=1,2,3$ & $0$, $0$, $0$ \\
+B: schedule treated as an action (wrong model) & $1$ \\
+B: schedule treated as state (correct model) & $0$ \\
 \bottomrule
 \end{tabular}
-\caption{Guardrails against false agency. Null A shows that dynamics without choice yields zero empowerment at all horizons. Null B shows that exogenous schedules can fake empowerment if incorrectly modeled as controllable actions; treating the schedule as state/noise restores the correct capacity of zero.}
+\caption{Null tests. A system without choice has zero empowerment at every horizon tested. An external schedule mistaken for an action produces a spurious bit, which disappears when the schedule is modelled as part of the state.}
 \label{tab:nulls}
 \end{table}
 
-\subsection{Why these nulls matter for the thesis}
-The thesis ``an agent is a \emph{theory object}'' includes a modeling discipline: the underlying theory/layer must type variables correctly on the proper side of the interface. Null A prevents us from calling any persistent moving pattern an agent. Null B prevents us from importing outside structure into the agent by mislabeling it as action. The remaining exhibits therefore interpret empowerment only after (i) feasibility is enforced by the ledger (P$_2$/P$_6$), and (ii) the action variable is genuinely controllable at the induced scale.
+\subsection{Why the null tests matter}
+The thesis that an agent is a theory object carries a modelling discipline: variables must be placed on the correct side of the interface. Null A stops us from calling every persistent moving pattern an agent. Null B stops us from crediting the agent with structure that belongs to its surroundings. In the experiments that follow, empowerment is computed only over actions that the ledger can pay for and that genuinely act on the ring-world state.

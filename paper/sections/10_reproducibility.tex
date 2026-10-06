@@ -1,31 +1,32 @@
-\section{Reproducibility and artifact contract}
+\section{Reproducibility and verification}
 \label{sec:repro}
 
-This paper is designed to be reproducible as a \emph{contract}, not as an aspiration. Every quantitative claim in the exhibits is backed by an audited artifact produced by deterministic scripts, keyed by stable configuration hashes. This section specifies (i) the contract that artifacts must satisfy, (ii) the exact commands that regenerate and verify them, and (iii) the small formal anchor that connects our viability computation to a greatest-fixed-point theorem.
+Every number in this paper is produced by deterministic scripts from hashed configurations, and every step from code to manuscript can be rerun and checked. This section lists what is checked, how, and what each check does and does not establish.
 
-\subsection{Artifact contract (what every result must contain)}
-All experiment outputs live under \texttt{results/} and are machine-checkable. JSON artifacts are required to include (possibly with type-specific naming for multi-config comparisons):
+\subsection{Artefacts}
+Experiment outputs are written under \texttt{results/}. Each JSON artefact records its configuration, a stable hash of that configuration (also used in file names), the measured quantities, a creation time, and library versions. The ablation artefacts also record the sampled start states and the per-state capacities behind each median, and the sweep records its sampling rule; the protocol and skill artefacts record the medians, whose constituent values can be recomputed from the stored configurations. The strict auditor checks that required fields are present, that every stored hash matches its configuration, that probability objects are valid, and that sweep arrays and packaging defects are well formed. It validates structure and consistency; it does not certify scientific claims.
+
+A single export script produces the manuscript's data figures and generated tables. The figures and the ablation table are read from the artefacts above; the packaging-control table and the order-witness table are computed by the export script directly from the stated configurations. The script also writes the cited scalars and their configuration hashes to \texttt{paper/generated/numbers.json}. The configuration and dictionary tables are part of the manuscript source. Sampling uses a fixed seed and recorded rules (\cref{tab:configs}).
+
+\subsection{Independent checks}
+Three further layers check the mathematics rather than the bookkeeping.
 \begin{itemize}[leftmargin=*, itemsep=0.25em]
-  \item \textbf{Configuration identity:} a \texttt{config} dictionary and its \texttt{config\_hash}, where the hash is a stable JSON hash of the config.
-  \item \textbf{Metrics payload:} a \texttt{metrics} dictionary (or a type-specific payload for traces/sweeps) containing the quantitative outputs used in the paper.
-  \item \textbf{Provenance:} a timestamp field (e.g., \texttt{created\_at\_utc}) and a \texttt{versions} dictionary (Python, NumPy, Matplotlib as applicable).
+  \item \textbf{Tests.} The test suite (80 tests) includes channels with known capacity, such as a Z-channel with capacity $\log_2(5/4)$, channels with redundant rows, failure on non-convergence, and an exhaustive comparison of the viability computation against a brute-force search over all $5{,}184$ systems with two states and two actions (all non-empty supports, feasible-action sets, and safe sets). It also retains the two-state counterexample of \cref{sec:engine}.
+  \item \textbf{Exact arithmetic.} A review script recomputes, with exact rational arithmetic and at $\tau=2$, the packaging maps of the funded comparison and of the failed-repair control of \cref{sec:ex_packaging}, together with an idle control in the unfunded variant of the substrate (which also has zero defect and an empty coherent kernel), and the order witnesses of \cref{sec:ex_holonomy}. It compares each relevant floating-point transition row with its exact counterpart and checks the tie-breaking conditions of the packaging separation.
+  \item \textbf{Lean.} The finite fixed-point and viability results of \cref{sec:engine} are proved in Lean~4 with mathlib \citep{demoura2021lean4,mathlib2019} (\cref{app:lean_viability}). An audit file prints the axioms each exported theorem depends on: only Lean's standard \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. There are no unproved steps, custom axioms, or calls to \texttt{native\_decide}.
 \end{itemize}
-Filenames also encode hashes when appropriate, so that a plot or table can be traced to a configuration without opening the file.
+The Lean results concern the abstract operator on finite sets. The step from the Python code, which reads supports off floating-point kernels, to those finite sets is tested but not mechanised; channel capacities and packaging maps are not formalised in Lean.
 
-For paper-facing stability, we export stable-named assets (figures and generated tables) into \texttt{paper/figures/} and \texttt{paper/generated/}. The file \texttt{paper/generated/numbers.json} collects the key scalars cited in the exhibits (e.g., idempotence defect at $\tau=2$, empowerment arrays, and learning medians) together with the hashes of the runs they were extracted from.
-
-\subsection{How to regenerate and verify (exact commands)}
-To regenerate all artifacts used by the paper from scratch, and then verify them, run the following two commands from the repository root:
-
+\subsection{Commands}
+From the repository root:
 \begin{verbatim}
+pip install -e '.[dev]'
+pytest -q
+(cd lean && lake build && lake env lean Audit.lean)
+python scripts/review_mathematics.py
 python scripts/run_all_experiments.py --clean
 python scripts/audit_results.py --strict
+python scripts/export_paper_assets.py --no-run
+python scripts/build_paper.py
 \end{verbatim}
-
-The first command rebuilds the full suite of evidence artifacts (rollouts, packaging measurements, null regimes, holonomy horizons, ablation table, sweep heatmaps, and learning--$\theta$ medians). The second command enforces the artifact contract above and fails if any artifact is missing required fields, if any \texttt{config\_hash} disagrees with the stable hash of the stored config, or if any stored probability objects violate basic stochasticity invariants.
-
-\subsection{Determinism and traceability}
-Experiments that involve sampling (e.g., sampling states from a viability kernel to estimate a median empowerment) use an explicit global seed and deterministic sampling rules. Configuration hashing uses a stable JSON serialization to ensure that the same config yields the same hash across runs and machines (modulo Python/library versions, which are recorded in each artifact).
-
-\subsection{Formal anchor: viability iteration as a greatest fixed point}
-Our viability kernel $\K$ is computed by iterating a monotone operator from the top safe set until convergence (Section~\ref{sec:engine}). In finite state spaces, this process stabilizes and yields the \emph{greatest} fixed point among all fixed points of the operator. In our finite kernel setting the controlled-invariance operator is explicitly contracting ($\mathcal{V}(K)\subseteq K$), matching the $\forall s,\ F(s)\subseteq s$ hypothesis in the Lean theorem. We provide a lightweight formal anchor of this fact in Lean 4 \citep{demoura2021lean4,mathlib2019}: see Appendix~\ref{app:lean_viability} and the corresponding file \texttt{lean/Agency/Viability.lean} in the repository.
+The experiment runner regenerates the experiment artefacts and ends with the strict audit; the export script then generates the manuscript's figures and tables. The null tests of \cref{sec:ex_nulls} are standalone scripts (\texttt{scripts/null\_single\_action.py} and \texttt{scripts/null\_schedule\_trap.py}) and are also covered by the test suite.

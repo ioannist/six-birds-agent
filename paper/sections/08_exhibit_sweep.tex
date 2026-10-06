@@ -1,57 +1,37 @@
-\section{Exhibit: noise--maintenance sweep (a phase diagram)}
+\section{Noise and the cost of maintenance}
 \label{sec:ex_sweep}
 
-The packaging exhibit (Section~\ref{sec:ex_packaging}) showed that maintenance can collapse idempotence defect for a coarse lens that hides microstate. Here we probe the complementary question: \emph{when does the agent layer exist at all under noise?} In the engine (Section~\ref{sec:engine}) we defined viability as a robust, support-based greatest fixed point. This exhibit shows a phase-diagram style transition: as internal noise increases, the viability kernel and the difference-making capacity collapse unless repair is cheap enough to be routinely feasible.
+The packaging experiment showed that funded repair can keep a package coherent. Here we ask the complementary question: across levels of damage noise and repair cost, when can a coherent package be maintained at all?
 
-\subsection{Setup: sweeping noise and maintenance cost}
-We use the ring-world environment with a damage bit $u$ that can flip due to noise and a repair action REPAIR that (when executed) restores $u=0$. We sweep a modest $8\times 8$ grid over:
-\begin{itemize}[leftmargin=*, itemsep=0.25em]
-  \item \textbf{Noise:} $p_{\mathrm{flip}}$ (probability of damage), from $0$ to $0.7$.
-  \item \textbf{Maintenance cost:} $\mathrm{cost}(\text{REPAIR})$ from $0$ to $7$.
-\end{itemize}
-All other parameters are held fixed (ring size, phase setting, and a ledger model with periodic gains), and repair succeeds with probability $1$ when it is feasible.
+\subsection{Setup}
+We use the sweep configuration of \cref{tab:configs}: a single phase (no protocol), no slip, a ledger from $0$ to $7$, movement cost $1$, and an income of $4$ units whenever the agent lands on site $0$. Repair succeeds with certainty when executed. We vary the damage probability $p_{\mathrm{flip}}\in\{0,0.1,\dots,0.7\}$ and the repair cost from $0$ to $7$.
 
-To make the viability notion sensitive to coherence (not merely survival), we choose a safe predicate that requires both budget and repaired state:
+Safety requires both a funded ledger and no damage,
 \[
-\mathrm{Safe}(s) \;:=\; (r(s)\ge 1)\ \wedge\ (u(s)=0).
+\Safe = \{\, s : r(s)\ge 1 \ \text{and}\ u(s)=0 \,\},
 \]
-This is a deliberate modeling choice: it treats the unrepaired internal bit as a loss of coherent objecthood, so the viability kernel measures ``staying viable \emph{and} coherent'' under support semantics.
+so the viability kernel contains the states that can be kept funded \emph{and} coherent with certainty under the model. At each grid point we compute $|\K|$ and the median of $\Emp_{\mathrm{feas}}$ at $H=2$ to the position $y$, over the first 16 states of $\K$ in index order (all of $\K$ when it has 16 states or fewer), with all three actions as channel inputs. When $\K$ is empty we report an empowerment of $0$ by convention.
 
-\subsection{Measured quantities}
-At each grid point we compute two quantities from Section~\ref{sec:engine}:
-\begin{enumerate}[leftmargin=*, itemsep=0.25em]
-  \item \textbf{Viability kernel size} $|\K|$ under ledger-gated feasibility and successor-support invariance.
-  \item \textbf{Median feasible empowerment on $\K$} (bits) at horizon $H=2$ using output lens $f(s)=y$ (outside ring position), with sequences filtered by the initial budget.
-\end{enumerate}
-If $\K=\emptyset$, empowerment is defined as $0$ by convention (no viable states, hence no induced agent layer).
+\subsection{Result: a support change and a cost threshold}
+\Cref{fig:sweep} shows both measures over the grid. Two features stand out.
 
-\subsection{Result: a collapse boundary in $(p_{\mathrm{flip}}, \mathrm{cost})$ space}
-Figure~\ref{fig:sweep_heatmaps} shows the two heatmaps. The qualitative picture is straightforward:
-\begin{itemize}[leftmargin=*, itemsep=0.25em]
-  \item Increasing noise $p_{\mathrm{flip}}$ makes it harder to keep $u=0$ in the robust-support sense: all nonzero-probability successors must remain safe.
-  \item Increasing repair cost shrinks the feasible action set $A_{\mathrm{feas}}(s)$ (Section~\ref{sec:engine}), eventually making it impossible to guarantee repair when damage occurs.
-\end{itemize}
-Because we use successor-support (almost-sure under the modeled kernel) semantics, $\K$ can be nonempty under noise only when there exists at least one feasible action whose transition support avoids unsafe states (e.g., repair actions that restore $u=0$ with probability 1 in the model); if all actions admit any unsafe successor with nonzero probability, the robust kernel collapses by design.
-The combined effect produces a region where $|\K|$ collapses to $0$ (no policy can keep the system safe-and-coherent for all support outcomes), and a complementary region where $|\K|$ remains substantial. Empowerment collapses along the same boundary because a nontrivial action channel requires an induced layer that persists: without viability, there is no stable domain on which actions are meaningful.
+\paragraph{All positive noise levels behave the same.}
+Every tested positive damage probability gives the same viability kernel: $|\K| = 56, 7, 6, 5, 4$ for repair costs $0$ to $4$ and $|\K|=0$ from cost $5$ on. This is because viability depends only on which transitions are \emph{possible}, and any $p_{\mathrm{flip}}$ strictly between $0$ and $1$ makes the same transitions possible. The noise level matters only through the change from $p_{\mathrm{flip}}=0$ to $p_{\mathrm{flip}}>0$, which adds damage transitions. The boundary in the figure is therefore a change of support at zero noise combined with a cost threshold, not a gradual shrinking as noise grows.
 
-Quantitatively, over this grid we observe:
-\[
-|\K| \in [0.0,\ 56.0],
-\qquad
-\text{median }\Emp_{\mathrm{feas}} \in [0.0,\ 2.321928094887362]\ \text{bits}.
-\]
-(The empowerment maximum is approximately $\log_2 5 \approx 2.322$ bits in this configuration.)
+\paragraph{Why the threshold sits at a repair cost of 4.}
+When damage is possible, any action other than REPAIR can leave the agent damaged, so a coherent state can stay coherent with certainty only by repairing at every step. Repair does not move the agent, so its ledger changes each step by the local income minus the repair cost. Away from the income site this is negative whenever repair costs anything, so those states eventually run out. At the income site the income is $4$, so repair is sustainable exactly when it costs at most $4$, and it can be executed only from ledgers $r$ that cover its cost. For cost $c$ between $1$ and $4$ the kernel is the set of undamaged states at site $0$ with $c\le r\le 7$, which has $8-c$ elements; for $c=0$ every safe state can repair for free, giving all $8\times 7=56$ safe states. Without noise, coherence never breaks, the agent can keep itself funded by moving through the income site, and the kernel has between 46 and 56 states for every repair cost.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.92\linewidth]{figures/fig_sweep_K.png}
-
-  \vspace{0.7em}
-
-  \includegraphics[width=0.92\linewidth]{figures/fig_sweep_E.png}
-  \caption{Noise--maintenance sweep (phase diagram). \textbf{Top:} viability kernel size $|\K|$ under the safe predicate $(r\ge 1)\wedge(u=0)$ and robust successor-support semantics. \textbf{Bottom:} median feasible empowerment (bits) on $\K$ at horizon $H=2$ with output lens $f(s)=y$. As noise increases and repair becomes expensive, the feasible set shrinks and the robust kernel collapses; empowerment collapses along the same boundary because difference-making requires an induced layer that can be maintained.}
-  \label{fig:sweep_heatmaps}
+  \includegraphics[width=\linewidth]{figures/fig_sweep.pdf}
+  \caption{Noise--maintenance sweep with safety ``funded and undamaged''. \textbf{(a)} Size of the viability kernel. \textbf{(b)} Median feasible empowerment (bits) at $H=2$ over up to 16 viable start states; $0$ where the kernel is empty, by convention. The line separates zero noise from positive noise. Every positive noise level gives the same kernel; the kernel vanishes once repair costs more than the income of $4$ available at site $0$.}
+  \label{fig:sweep}
 \end{figure}
 
-\subsection{Interpretation in Six Birds terms}
-This is the most direct ``agency requires maintenance under noise'' result. P$_6$ (accounting/transduction) supplies the mechanism for paying to restore coherence; P$_2$ (constraints) determines whether that mechanism is actually feasible at the boundary; and P$_5$ (closure) turns these into a robust invariant safe set under support semantics. The phase diagram makes the interaction visible: when the inequality implied by the ledger can no longer fund repair at the rate demanded by noise, the induced agent layer disappears ($\K=\emptyset$), and with it the meaning of action-as-difference-making.
+\paragraph{Empowerment.}
+Without noise, median empowerment is $\log_2 5\approx 2.32$~bits for repair costs up to $3$ and $\log_2 3\approx1.58$~bits from cost $4$ on. With noise it lies between $1.77$ and $2.14$~bits wherever $\K$ is non-empty. On the grid it is smallest at $p_{\mathrm{flip}}=0.5$ and takes the same values at $p_{\mathrm{flip}}$ and $1-p_{\mathrm{flip}}$ (the pairs $0.3$/$0.7$ and $0.4$/$0.6$).
+
+These positive values must be read with the scope of \cref{sec:engine} in mind. The channel inputs are open-loop sequences filtered only by the initial ledger, and most of them do not preserve coherence: when damage is possible, only REPAIR keeps the agent coherent with certainty, and a channel restricted to coherence-preserving moves would have zero capacity. The empowerment panel therefore measures how much an agent that \emph{starts} in a maintainable state can influence its position, not how much it can influence it while staying coherent. The two panels coincide in where empowerment is zero only because empty kernels are reported as zero.
+
+\subsection{Interpretation}
+This is the clearest instance in the paper of maintenance as a condition for agenthood under noise. Resource accounting (P$_6$) provides the means of paying for coherence, feasibility (P$_2$) decides whether that payment can actually be made, and closure (P$_5$) turns the two into an invariant set. When the income available at a sustainable location can no longer cover the cost of repair, the maintained package disappears, $\K=\emptyset$, and with it the domain on which the agent's actions were defined.

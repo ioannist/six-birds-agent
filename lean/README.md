@@ -31,6 +31,7 @@ standard `propext`, `Classical.choice`, and `Quot.sound`; there are no proof
 holes, custom axioms, or `native_decide` calls.
 
 The Python implementation, ring probabilities, packaging endomaps, and channel
-capacities are not mechanized here. Their mathematical checks and the limits
-of the bridge to these theorems are recorded in
-[`../docs/mathematics-review.txt`](../docs/mathematics-review.txt).
+capacities are not mechanized here. Their exact-arithmetic checks are
+reproduced by `scripts/review_mathematics.py`, and the limits of the bridge to
+these theorems are stated in the paper's reproducibility section and Lean
+appendix.
